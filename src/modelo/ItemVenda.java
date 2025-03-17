@@ -34,7 +34,15 @@ public class ItemVenda {
 	public String getFoto() {
 		return foto;
 	}
-	public void setFoto(String foto) {
-		this.foto = foto;
+	public void setFoto(String produto) {
+		this.foto = produto;
+	}
+	public Long getIdProduto() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+	public void setFoto(Produto produto) {
+		// TODO Auto-generated method stub
+		
 	}
 }

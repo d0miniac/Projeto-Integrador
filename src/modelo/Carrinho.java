@@ -50,4 +50,9 @@ public class Carrinho {
 		this.itens = itens;
 	}
 
+	public void adicionarItem(ItemVenda novoItem) {
+		// TODO Auto-generated method stub
+		
+	}
+
 }
