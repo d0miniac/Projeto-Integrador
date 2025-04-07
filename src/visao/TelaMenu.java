@@ -18,9 +18,9 @@ import modelo.Funcionario;
 import modelo.Produto;
 
 public class TelaMenu extends JFrame {
-    public JButton btnFuncionarios;
+	public JButton btnFuncionarios;
 
-    public static void main(String[] args) {
+	public static void main(String[] args) {
         EventQueue.invokeLater(() -> {
             try {
 				Produto prod = new Produto();
@@ -34,9 +34,12 @@ public class TelaMenu extends JFrame {
                 e.printStackTrace();
             }
         });
-    }
 
-    public TelaMenu(Produto prod,Funcionario func, String mensagem) {
+	
+
+	}
+
+	public TelaMenu(Produto prod,Funcionario func, String mensagem) {
         setTitle("MENU");
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setSize(1215, 850);
@@ -170,11 +173,22 @@ public class TelaMenu extends JFrame {
                         
                         JButton btnClientes = new ImageButton("src/img/icone_clientes.png");
                         buttonPanel.add(btnClientes, "cell 1 1 2 1,grow");
-                        buttonPanel.add(btnFuncionarios, "cell 3 1 2 1,grow");
+                        btnClientes.addActionListener(new ActionListener() {
+                        public void actionPerformed(ActionEvent e) {
+                                dispose();
+                                TelaCliente telaCliente = new TelaCliente();
+                                telaCliente.setVisible(true);   
+                        }
+                        
+                          });
+                        
+                buttonPanel.add(btnFuncionarios, "cell 3 1 2 1,grow");
                 buttonPanel.add(btnVendas, "cell 5 1 2 1,grow");
 
         getContentPane().add(mainPanel);
 
         setVisible(true);
-    }
+    
+                      
+	}
 }
