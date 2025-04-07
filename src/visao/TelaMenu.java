@@ -162,8 +162,8 @@ public class TelaMenu extends JFrame {
         buttonPanel.add(btnFornecedores, "cell 3 0 2 1,grow");
         buttonPanel.add(btnHistorico, "cell 5 0 2 1,grow");
         
-        JButton btnClientes = new JButton("");
-        buttonPanel.add(btnClientes, "cell 1 1");
+        JButton btnClientes1 = new JButton("");
+        buttonPanel.add(btnClientes1, "cell 1 1");
         buttonPanel.add(btnFuncionarios, "cell 2 1 2 1,grow");
         buttonPanel.add(btnProdutos, "cell 1 0 2 1,grow");
         buttonPanel.add(btnVendas, "cell 4 1 2 1,grow");
