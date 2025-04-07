@@ -5,6 +5,8 @@ import java.awt.EventQueue;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
+import net.miginfocom.swing.MigLayout;
+import javax.swing.JLabel;
 
 public class TelaCliente extends JFrame {
 
@@ -37,6 +39,13 @@ public class TelaCliente extends JFrame {
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 
 		setContentPane(contentPane);
+		contentPane.setLayout(new MigLayout("", "[grow]", "[grow][grow]"));
+		
+		JPanel panel = new JPanel();
+		contentPane.add(panel, "cell 0 0,grow");
+		
+		JPanel panel_1 = new JPanel();
+		contentPane.add(panel_1, "cell 0 1,grow");
 	}
 
 }
