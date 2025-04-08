@@ -30,7 +30,7 @@ public class TelaDetalhesProduto extends JFrame {
 		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 		getContentPane().setLayout(new BorderLayout());
 
-		ImageIcon imageIcon = new ImageIcon(item.getFoto());
+		ImageIcon imageIcon = new ImageIcon();
 		Image image = imageIcon.getImage().getScaledInstance(350, 350, Image.SCALE_SMOOTH);
 		JLabel lblImage = new JLabel(new ImageIcon(image));
 		getContentPane().add(lblImage, BorderLayout.NORTH);

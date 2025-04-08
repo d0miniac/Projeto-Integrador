@@ -88,7 +88,7 @@ public class TelaCarrinho extends JFrame {
 		panel_2.setBackground(new Color(243, 244, 240));
 		panel_2.setLayout(new MigLayout("wrap 3", "[grow]", "[]"));
 		for (ItemVenda item : listaItens) {
-			ImageIcon imageIcon = new ImageIcon(item.getFoto());
+			ImageIcon imageIcon = new ImageIcon();
 	        Image image = imageIcon.getImage().getScaledInstance(350, 350, Image.SCALE_SMOOTH);
 	        JLabel lblItemFoto = new JLabel(new ImageIcon(image));
 			JLabel lblItemNome = new JLabel(item.getNome());

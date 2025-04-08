@@ -360,7 +360,7 @@ public class TelaCadastroProdutos extends JFrame {
 					tamanho = tamanhoselecionado.getDescricao();
 
 					String categoria;
-					Categoria categoriaSelecionada = (Categoria) cbxCategoria.getSelectedItem();
+					String categoriaSelecionada = (String) cbxCategoria.getSelectedItem();
 					categoria = categoriaSelecionada.getDescricao();
 
 					produto.setCategoria(categoriaSelecionada);

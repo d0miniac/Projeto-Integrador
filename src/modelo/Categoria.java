@@ -1,50 +1,30 @@
 package modelo;
 
 public enum Categoria {
-	CAMISA("Camisa"),CALÇA("Calça"),BLUSA("Blusa"),JAQUETA("Jaqueta"),VESTIDO("Vestido"),SHORTS("Shorts"),INTIMA("Intíma");
-	
-	private String descricao;
+    CAMISA("Camisa"),
+    CALÇA("Calça"),
+    BLUSA("Blusa"),
+    JAQUETA("Jaqueta"),
+    VESTIDO("Vestido"),
+    SHORTS("Shorts"),
+    INTIMA("Íntima");
 
-	
-	private Categoria(String desc) {
-		this.descricao = desc;
-		// TODO Auto-generated constructor stub
-	}
-	
-	public String getDescricao() {
-		return descricao;
-	}
+    private final String descricao;
 
-	public void setDescricao(String descricao) {
-		this.descricao = descricao;
-	}
-	public static Categoria getCategoriaPorDescricao(String categoria) {
-		switch (categoria) {
-		case "Camisa": 
-			return CAMISA;
-			
-		case "Calça":
-			return CALÇA;
-			
-		case "Blusa":
-			return BLUSA;
-			
-		case "Jaqueta":
-			return JAQUETA;
-			
-		case "Vestido":
-			return VESTIDO;
-			
-		case "Shorts":
-			return SHORTS;
-			
-		case "Intíma":
-			return INTIMA;
-		
-		default:
-			throw new IllegalArgumentException("Unexpected value: " + categoria);
-		}
-		
-	}
-	
+    Categoria(String descricao) {
+        this.descricao = descricao;
+    }
+
+    public String getDescricao() {
+        return descricao;
+    }
+
+    public static Categoria getCategoriaPorDescricao(String categoria) {
+        for (Categoria c : Categoria.values()) {
+            if (c.getDescricao().equalsIgnoreCase(categoria)) {
+                return c;
+            }
+        }
+        throw new IllegalArgumentException("Categoria inválida: " + categoria);
+    }
 }

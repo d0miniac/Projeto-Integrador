@@ -41,38 +41,36 @@ public class ProdutoDAO {
 		}
 		return res1;
 	}
-
 	public ArrayList<Produto> selecionarProdutos() {
-		ArrayList<Produto> listaProdutos = new ArrayList<>();
-		String sql = "SELECT * FROM Produtos;";
-		PreparedStatement stmt1 = null;
-		ResultSet rs = null;
-		Connection conn = ConexaoBD.getConexaoMySQL();
-		try {
-			stmt1 = conn.prepareStatement("SELECT * FROM armariodigital.produtos;");
-			rs = stmt1.executeQuery();
-			while (rs.next()) {
-				Produto p = new Produto();
-				p.setId(rs.getLong("idProduto"));
-				p.setCategoria(Categoria.getCategoriaPorDescricao(rs.getString("Categoria")));
-				p.setCor(Cor.getCorPorDescicao(rs.getString("Cor")));
-				p.setTamanho(Tamanho.getTamanhoPorDescricao(rs.getString("Tamanho")));
-				p.setPreco(rs.getFloat("Preco"));
-				p.setQuantidade(rs.getInt("QT_Estoque"));
-				p.setMarca(Marca.getMarcaPorDescricao(rs.getString("Marca")));
-				p.setFornecedor(rs.getLong("Fornecedor_idFornecedor"));
-				p.setFoto(rs.getString("Imagem"));
-				listaProdutos.add(p);
+	    ArrayList<Produto> listaProdutos = new ArrayList<>();
+	    String sql = "SELECT * FROM armariodigital.produtos;";
+	    PreparedStatement stmt1 = null;
+	    ResultSet rs = null;
+	    Connection conn = ConexaoBD.getConexaoMySQL();
 
-			}
+	    try {
+	        stmt1 = conn.prepareStatement(sql);
+	        rs = stmt1.executeQuery();
+	        while (rs.next()) {
+	            Produto p = new Produto();
+	            p.setId(rs.getLong("idProduto"));
+	            p.setCategoria(rs.getString("Categoria")); // ✅ Corrigido
+	            p.setCor(rs.getString("Cor"));              // ✅ Corrigido
+	            p.setTamanho(rs.getString("Tamanho"));      // ✅ Corrigido
+	            p.setPreco(rs.getFloat("Preco"));
+	            p.setQuantidade(rs.getInt("QT_Estoque"));
+	            p.setMarca(rs.getString("Marca"));          // ✅ Corrigido
+	            p.setFornecedor(rs.getLong("Fornecedor_idFornecedor"));
+	            p.setFoto(rs.getString("Imagem"));
 
-		} catch (SQLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+	            listaProdutos.add(p);
+	        }
 
-		return listaProdutos;
+	    } catch (SQLException e) {
+	        e.printStackTrace();
+	    }
 
+	    return listaProdutos;
 	}
 
 	public void excluirProdutos(Long id) throws SQLException {
@@ -153,7 +151,7 @@ public class ProdutoDAO {
 				Produto p = new Produto();
 				p.setId(rs.getLong("idProduto"));
 				p.setCategoria(Categoria.getCategoriaPorDescricao(rs.getString("Categoria")));
-				p.setCor(Cor.getCorPorDescicao(rs.getString("Cor")));
+				p.setCor(Cor.getCorPorDescricao(rs.getString("Cor")));
 				p.setTamanho(Tamanho.getTamanhoPorDescricao(rs.getString("Tamanho")));
 				p.setPreco(rs.getFloat("Preco"));
 				p.setQuantidade(rs.getInt("QT_Estoque"));

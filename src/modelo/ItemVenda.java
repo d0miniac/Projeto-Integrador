@@ -5,7 +5,7 @@ public class ItemVenda {
 	public Float preco;
 	public String nome;
 	public int quantidade;
-	public String foto;
+	public Produto foto;
 	
 	public Float getPreco() {
 		return preco;
@@ -31,10 +31,10 @@ public class ItemVenda {
 	public void setQuantidade(int quantidade) {
 		this.quantidade = quantidade;
 	}
-	public String getFoto() {
+	public Produto getFoto() {
 		return foto;
 	}
-	public void setFoto(String produto) {
+	public void setFoto1(Produto produto) {
 		this.foto = produto;
 	}
 	public Long getIdProduto() {
@@ -42,6 +42,10 @@ public class ItemVenda {
 		return null;
 	}
 	public void setFoto(Produto produto) {
+		// TODO Auto-generated method stub
+		
+	}
+	public void setFoto(String string) {
 		// TODO Auto-generated method stub
 		
 	}
