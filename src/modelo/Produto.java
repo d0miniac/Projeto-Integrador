@@ -2,6 +2,7 @@ package modelo;
 
 public class Produto {
     private Long id;
+    private String nome;
     private Tamanho tamanho;
     private Categoria categoria;
     private float preco;
@@ -10,8 +11,8 @@ public class Produto {
     private Marca marca;
     private Long fornecedor;
     private String foto;
-
-    public Long getId() {
+    
+	public Long getId() {
         return id;
     }
 
@@ -78,7 +79,7 @@ public class Produto {
     public void setMarca(Marca marca) {
         this.marca = marca;
     }
-
+    
     public void setMarca(String marca) {
         this.marca = Marca.getMarcaPorDescricao(marca);
     }
@@ -100,7 +101,9 @@ public class Produto {
     }
 
 	public String getNome() {
-		// TODO Auto-generated method stub
-		return null;
+		return nome;
+	}
+	
+	public void setNome(String nome) {
 	}
 }

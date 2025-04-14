@@ -20,16 +20,17 @@ public class ProdutoDAO {
 		Connection conn = ConexaoBD.getConexaoMySQL();
 		try {
 			stmt1 = conn.prepareStatement(
-					"insert into armariodigital.produtos(Tamanho,Categoria,Preco,QT_Estoque,Cor,Marca,Fornecedor_idFornecedor,Imagem) values (?, ?,?,?,?,?,?,?);");
+					"insert into armariodigital.produtos(Nome, Tamanho, Categoria, Preco, QT_Estoque ,Cor ,Marca ,Fornecedor_idFornecedor , Imagem) values (?, ?,?,?,?,?,?,?);");
 
-			stmt1.setString(1, p.getTamanho().getDescricao());
-			stmt1.setString(2, p.getCategoria().getDescricao());
-			stmt1.setFloat(3, p.getPreco());
-			stmt1.setInt(4, p.getQuantidade());
-			stmt1.setString(5, p.getCor().getDescricao());
-			stmt1.setString(6, p.getMarca().getDescricao());
-			stmt1.setLong(7, p.getFornecedor());
-			stmt1.setString(8, p.getFoto());
+			stmt1.setString(1, p.getNome());
+			stmt1.setString(2, p.getTamanho().getDescricao());
+			stmt1.setString(3, p.getCategoria().getDescricao());
+			stmt1.setFloat(4, p.getPreco());
+			stmt1.setInt(5, p.getQuantidade());
+			stmt1.setString(6, p.getCor().getDescricao());
+			stmt1.setString(7, p.getMarca().getDescricao());
+			stmt1.setLong(8, p.getFornecedor());
+			stmt1.setString(9, p.getFoto());
 			res1 = stmt1.executeUpdate();
 
 			stmt1.close();
@@ -53,6 +54,7 @@ public class ProdutoDAO {
 	        rs = stmt1.executeQuery();
 	        while (rs.next()) {
 	            Produto p = new Produto();
+	            p.setNome(rs.getString("Nome"));
 	            p.setId(rs.getLong("idProduto"));
 	            p.setCategoria(rs.getString("Categoria")); // ✅ Corrigido
 	            p.setCor(rs.getString("Cor"));              // ✅ Corrigido
@@ -149,6 +151,7 @@ public class ProdutoDAO {
 			rs = stmt1.executeQuery();
 			while (rs.next()) {
 				Produto p = new Produto();
+	            p.setNome(rs.getString("Nome"));
 				p.setId(rs.getLong("idProduto"));
 				p.setCategoria(Categoria.getCategoriaPorDescricao(rs.getString("Categoria")));
 				p.setCor(Cor.getCorPorDescricao(rs.getString("Cor")));

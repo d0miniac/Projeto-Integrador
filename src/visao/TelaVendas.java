@@ -1,15 +1,11 @@
 package visao;
 
 import java.awt.*;
+
 import java.awt.event.*;
-import java.sql.SQLException;
-import java.time.LocalDate;
-import java.time.LocalTime;
-import java.time.format.DateTimeFormatter;
 import javax.swing.*;
 import javax.swing.border.LineBorder;
 import controle.ProdutoDAO;
-import controle.VendaDAO;
 import modelo.*;
 import net.miginfocom.swing.MigLayout;
 import java.util.ArrayList;
@@ -21,7 +17,6 @@ public class TelaVendas extends JFrame {
     private JPanel contentPane_1, panelVazio, panelProdutos;
     private ArrayList<Produto> listaProdutos;
     private ProdutoDAO produtoDAO;
-    private ArrayList<ItemVenda> listaItens;
     private JTextField campoBusca;
     private JComboBox<String> comboCategorias;
     private Funcionario funcionario;
@@ -36,7 +31,7 @@ public class TelaVendas extends JFrame {
         Carrinho carrinho = Carrinho.getInstancia();
         produtoDAO = new ProdutoDAO();
         listaProdutos = produtoDAO.selecionarProdutos();
-        listaItens = carrinho.getItens();
+        carrinho.getItens();
 
         setTitle("Carrinho de Produtos");
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -75,16 +70,18 @@ public class TelaVendas extends JFrame {
         // ComboBox de categorias
         comboCategorias = new JComboBox<>();
         comboCategorias.addItem("Todas categorias");
-        for (Produto p : listaProdutos) {
-            if (((DefaultComboBoxModel<String>) comboCategorias.getModel()).getIndexOf(p.getCategoria()) == -1) {
-                comboCategorias.addItem(p.getCategoria().getDescricao());
+        for (Categoria categoria : Categoria.values()) {
+                comboCategorias.addItem(categoria.getDescricao());
             }
-        }
+        
 
-        JButton btnFiltrar = new JButton("Filtrar");
-        btnFiltrar.addActionListener(e -> aplicarFiltro());
 
-        panelVazio.add(lblSeta);
+		JButton btnFiltrar = new JButton("Filtrar");
+        btnFiltrar.addActionListener(new ActionListener() {
+        	public void actionPerformed(ActionEvent e) {
+        		aplicarFiltro();
+        	}
+        });
         panelVazio.add(new JLabel("Buscar:"));
         panelVazio.add(campoBusca);
         panelVazio.add(new JLabel("Categoria:"));
@@ -94,7 +91,8 @@ public class TelaVendas extends JFrame {
         contentPane_1.add(panelVazio, BorderLayout.NORTH);
     }
 
-    private void criarPainelProdutos(List<Produto> produtos) {
+    
+	private void criarPainelProdutos(List<Produto> produtos) {
         JPanel panelProdutosComScroll = new JPanel(new BorderLayout());
         panelProdutosComScroll.setPreferredSize(new Dimension(getWidth(), getHeight() - 100));
 
@@ -147,8 +145,10 @@ public class TelaVendas extends JFrame {
         String categoriaSelecionada = (String) comboCategorias.getSelectedItem();
 
         List<Produto> filtrados = listaProdutos.stream()
+        	.filter(produto -> produto.getNome() != null && produto.getNome().toLowerCase().contains(categoriaSelecionada))
             .filter(p -> p.getNome().toLowerCase().contains(textoBusca))
-            .filter(p -> categoriaSelecionada.equals("Todas categorias") || p.getCategoria().equals(categoriaSelecionada))
+            .filter(p -> categoriaSelecionada.equals("Todas categorias") ||
+            		p.getCategoria().getDescricao().equalsIgnoreCase(categoriaSelecionada))
             .collect(Collectors.toList());
 
         exibirProdutos(filtrados);

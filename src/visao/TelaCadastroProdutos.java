@@ -77,6 +77,7 @@ public class TelaCadastroProdutos extends JFrame {
 	private JTextField txtTitulo;
 
 	public static void main(String[] args) {
+		
 		EventQueue.invokeLater(() -> {
 			try {
 				Produto prod = new Produto();
@@ -360,7 +361,7 @@ public class TelaCadastroProdutos extends JFrame {
 					tamanho = tamanhoselecionado.getDescricao();
 
 					String categoria;
-					String categoriaSelecionada = (String) cbxCategoria.getSelectedItem();
+					Categoria categoriaSelecionada = (Categoria) cbxCategoria.getSelectedItem();
 					categoria = categoriaSelecionada.getDescricao();
 
 					produto.setCategoria(categoriaSelecionada);
