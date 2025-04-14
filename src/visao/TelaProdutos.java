@@ -1,6 +1,7 @@
 package visao;
 
 import java.awt.BorderLayout;
+
 import java.awt.Color;
 import java.awt.Container;
 import java.awt.Cursor;
@@ -19,20 +20,15 @@ import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
-import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.JTextField;
 import javax.swing.SwingConstants;
 import javax.swing.border.LineBorder;
-import javax.swing.table.DefaultTableModel;
 import javax.swing.table.JTableHeader;
-import javax.swing.text.JTextComponent;
-
 import controle.ProdutoDAO;
 import modelo.Carrinho;
-import modelo.Fornecedor;
 import modelo.Funcionario;
 import modelo.ItemVenda;
 import modelo.Produto;

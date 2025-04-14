@@ -33,6 +33,7 @@ public class ProdutoDAO {
 			stmt1.setString(9, p.getFoto());
 			res1 = stmt1.executeUpdate();
 
+			
 			stmt1.close();
 			conn.close();
 			
@@ -56,18 +57,20 @@ public class ProdutoDAO {
 	            Produto p = new Produto();
 	            p.setNome(rs.getString("Nome"));
 	            p.setId(rs.getLong("idProduto"));
-	            p.setCategoria(rs.getString("Categoria")); // ✅ Corrigido
-	            p.setCor(rs.getString("Cor"));              // ✅ Corrigido
-	            p.setTamanho(rs.getString("Tamanho"));      // ✅ Corrigido
+	            p.setCategoria(Categoria.valueOf(rs.getString("Categoria").toUpperCase()));
+	            p.setCor(Cor.getCorPorDescricao(rs.getString("Cor")));
+	            p.setTamanho(Tamanho.getTamanhoPorDescricao(rs.getString("Tamanho")));
 	            p.setPreco(rs.getFloat("Preco"));
 	            p.setQuantidade(rs.getInt("QT_Estoque"));
-	            p.setMarca(rs.getString("Marca"));          // ✅ Corrigido
+	            p.setMarca(Marca.getMarcaPorDescricao(rs.getString("Marca")));
 	            p.setFornecedor(rs.getLong("Fornecedor_idFornecedor"));
 	            p.setFoto(rs.getString("Imagem"));
 
 	            listaProdutos.add(p);
 	        }
-
+	        rs.close();
+	        stmt1.close();
+	        conn.close();
 	    } catch (SQLException e) {
 	        e.printStackTrace();
 	    }
