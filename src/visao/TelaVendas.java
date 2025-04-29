@@ -119,7 +119,7 @@ public class TelaVendas extends JFrame {
             JPanel panelDetalhes = new JPanel();
             panelDetalhes.setLayout(new BoxLayout(panelDetalhes, BoxLayout.Y_AXIS));
             panelDetalhes.setBackground(Color.WHITE);
-            panelDetalhes.add(new JLabel("Produto: " + prod.getNome()));
+           // panelDetalhes.add(new JLabel("Produto: " + prod.getNome()));
             panelDetalhes.add(new JLabel("Preço: R$ " + prod.getPreco()));
             panelDetalhes.add(new JLabel("Categoria: " + prod.getCategoria().getDescricao()));
 

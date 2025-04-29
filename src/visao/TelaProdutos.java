@@ -270,10 +270,10 @@ public class TelaProdutos extends JFrame {
 	        btnProduto.add(lblImage, BorderLayout.CENTER);
 
 	        // Definir nome do produto
-	        JLabel lblNome = new JLabel(produto.getNome(), SwingConstants.CENTER);
-	        lblNome.setFont(new Font("Tahoma", Font.PLAIN, 14));
-	        lblNome.setPreferredSize(new Dimension(350, 50));
-	        btnProduto.add(lblNome, BorderLayout.SOUTH);
+	      //  JLabel lblNome = new JLabel(produto.getNome(), SwingConstants.CENTER);
+	        //lblNome.setFont(new Font("Tahoma", Font.PLAIN, 14));
+	        //lblNome.setPreferredSize(new Dimension(350, 50));
+	        //btnProduto.add(lblNome, BorderLayout.SOUTH);
 
 	        // Botão de adicionar ao carrinho
 	        JButton btnAdicionarCarrinho = new JButton("Adicionar ao Carrinho");

@@ -2,7 +2,7 @@ package modelo;
 
 public class Produto {
     private Long id;
-    private String nome;
+  //  private String nome;
     private Tamanho tamanho;
     private Categoria categoria;
     private float preco;
@@ -100,10 +100,10 @@ public class Produto {
         this.foto = foto;
     }
 
-	public String getNome() {
-		return nome;
-	}
+	//public String getNome() {
+	//	return nome;
+//	}
 	
-	public void setNome(String nome) {
-	}
+	//public void setNome(String nome) {
+	//}
 }
