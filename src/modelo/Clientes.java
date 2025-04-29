@@ -33,5 +33,9 @@ public class Clientes {
 	public void setTelefone(String telefone) {
 		this.telefone = telefone;
 	}
+	//public static Clientes get(int linhaSelecionada) {
+		// TODO Auto-generated method stub
+	//	return null;
+	//}
 	
 }
