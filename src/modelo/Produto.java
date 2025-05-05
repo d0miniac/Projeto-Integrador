@@ -98,12 +98,9 @@ public class Produto {
 
     public void setFoto(String foto) {
         this.foto = foto;
+    
     }
+   }
 
-	//public String getNome() {
-	//	return nome;
-//	}
+
 	
-	//public void setNome(String nome) {
-	//}
-}

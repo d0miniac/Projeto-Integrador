@@ -36,7 +36,7 @@ public class TelaMenu extends JFrame {
         });
     }
 
-    public TelaMenu(Object prod,Funcionario func, Object mensagem) {
+    public TelaMenu(Produto prod,Funcionario func, String mensagem) {
         setTitle("MENU");
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setSize(1215, 850);
