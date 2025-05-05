@@ -4,6 +4,8 @@ import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 
 import modelo.Clientes;
+import modelo.Funcionario;
+import modelo.Produto;
 import net.miginfocom.swing.MigLayout;
 
 import java.awt.*;
@@ -16,8 +18,17 @@ public class TelaClientes extends JFrame {
     private JTable tabelaClientes;
     private DefaultTableModel modeloTabela;
     private List<Clientes> listaClientes = new ArrayList<>();
+	private Object prod;
+	private Funcionario func;
+	private Object mensagem;
 
-    public TelaClientes() {
+    public TelaClientes(Object prod, modelo.Funcionario func, Object mensagem) {
+    	this.prod = prod;
+    	this.func = func;
+    	this.mensagem = mensagem;
+
+    	
+    	
         setTitle("Gerenciar Clientes");
         setSize(800, 600);
         setLocationRelativeTo(null);
@@ -43,9 +54,13 @@ public class TelaClientes extends JFrame {
         JButton btnAdicionar = new JButton("Adicionar");
         JButton btnEditar = new JButton("Editar");
         JButton btnExcluir = new JButton("Excluir");
+        JButton btnVoltar = new JButton("Voltar");
+
         painelBotoes.add(btnAdicionar);
         painelBotoes.add(btnEditar);
         painelBotoes.add(btnExcluir);
+        painelBotoes.add(btnVoltar);
+
 
         modeloTabela = new DefaultTableModel(new Object[]{"Nome", "Email", "Telefone"}, 0);
         tabelaClientes = new JTable(modeloTabela);
@@ -59,6 +74,17 @@ public class TelaClientes extends JFrame {
         btnAdicionar.addActionListener(e -> adicionarCliente());
         btnEditar.addActionListener(e -> editarCliente());
         btnExcluir.addActionListener(e -> excluirCliente());
+        
+        btnVoltar.addActionListener(e -> {
+        	dispose();
+        	TelaMenu telaMenu = new TelaMenu(prod, func, mensagem);
+        	telaMenu.setVisible(true);
+        	telaMenu.setSize(1215, 850);
+        	telaMenu.setLocationRelativeTo(null);
+
+        	
+        });
+
 
         tabelaClientes.addMouseListener(new MouseAdapter() {
             @Override

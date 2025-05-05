@@ -36,7 +36,7 @@ public class TelaMenu extends JFrame {
         });
     }
 
-    public TelaMenu(Produto prod,Funcionario func, String mensagem) {
+    public TelaMenu(Object prod,Funcionario func, Object mensagem) {
         setTitle("MENU");
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setSize(1215, 850);
@@ -87,7 +87,7 @@ public class TelaMenu extends JFrame {
         btnClientes.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
                 dispose();
-                TelaClientes telaClientes = new TelaClientes();
+                TelaClientes telaClientes = new TelaClientes(prod, func, mensagem);
                 telaClientes.setVisible(true);
                 telaClientes.setSize(800, 600);
                // telaClientes.setLocationRelativeTo(null);
