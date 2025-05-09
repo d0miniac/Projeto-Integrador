@@ -9,7 +9,7 @@ public class Clientes implements Serializable{
 	private String email;
 	private String telefone;
 	
-	public Clientes() {
+	public Clientes(int i, String string, String string2, String string3) {
 		
 	}
 	public Clientes(String nome, String email, String telefone) {
@@ -40,5 +40,13 @@ public class Clientes implements Serializable{
 		// TODO Auto-generated method stub
 	//	return null;
 	//}
+	public void setId(int int1) {
+		// TODO Auto-generated method stub
+		
+	}
+	public int getId() {
+		// TODO Auto-generated method stub
+		return (Integer) null;
+	}
 	
 }

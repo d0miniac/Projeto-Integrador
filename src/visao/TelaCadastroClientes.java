@@ -1,23 +1,30 @@
 package visao;
 
+import controle.ClienteDAO;
 import modelo.Clientes;
 import modelo.Funcionario;
 import modelo.Produto;
+
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
+import java.sql.SQLException;
+
 import net.miginfocom.swing.MigLayout;
 
-public class TelaCadastroClientes extends JFrame {
+public abstract class TelaCadastroClientes extends JFrame {
     private JTextField txtNome, txtEmail, txtTelefone;
     private Produto prod;
     private Funcionario func;
     private String mensagem;
+    private ClienteDAO dao;
 
     public TelaCadastroClientes(Produto prod, Funcionario func, String mensagem) {
         this.prod = prod;
         this.func = func;
         this.mensagem = mensagem;
+
+        dao = new ClienteDAO();
 
         setTitle("Cadastrar Cliente");
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
@@ -30,20 +37,20 @@ public class TelaCadastroClientes extends JFrame {
         painelFundo.setLayout(new BorderLayout());
         setContentPane(painelFundo);
 
-        // Topo (voltar)
+        // Topo
         JPanel topPanel = new JPanel(new MigLayout("", "[87px][][grow][160px]", "[grow]"));
-        topPanel.setOpaque(false);
+        topPanel.setBackground(new Color(33, 64, 154));
+        topPanel.setPreferredSize(new Dimension(0, 100));
 
-        // Ícone voltar
+        // Voltar
         JLabel lblVoltar = new JLabel(new ImageIcon(
             new ImageIcon(getClass().getResource("/img/de-volta.png"))
-                .getImage().getScaledInstance(70, 70, Image.SCALE_SMOOTH)
+                  .getImage().getScaledInstance(70, 70, Image.SCALE_SMOOTH)
         ));
         lblVoltar.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
         lblVoltar.addMouseListener(new MouseAdapter() {
             public void mouseClicked(MouseEvent e) {
                 dispose();
-                new TelaClientes(prod, func, mensagem).setVisible(true);
             }
         });
         topPanel.add(lblVoltar, "cell 0 0,alignx left,aligny center");
@@ -54,10 +61,10 @@ public class TelaCadastroClientes extends JFrame {
         lblTitulo.setForeground(Color.WHITE);
         topPanel.add(lblTitulo, "cell 1 0 2 1,alignx center,aligny center");
 
-        // Ícone usuário (mesmo padrão)
+        // Ícone usuário
         JLabel lblUser = new JLabel(new ImageIcon(
             new ImageIcon(getClass().getResource("/img/icone.png"))
-                .getImage().getScaledInstance(70, 70, Image.SCALE_SMOOTH)
+                  .getImage().getScaledInstance(70, 70, Image.SCALE_SMOOTH)
         ));
         topPanel.add(lblUser, "cell 3 0,alignx right,aligny center");
 
@@ -92,19 +99,22 @@ public class TelaCadastroClientes extends JFrame {
                 JOptionPane.showMessageDialog(this, "Preencha todos os campos!", "Erro", JOptionPane.ERROR_MESSAGE);
                 return;
             }
-            // opcional: persistir com ClienteDAO
-            // new ClienteDAO().inserir(new Clientes(nome, email, telefone));
+            Clientes c = new Clientes(nome, email, telefone);
+            try {
+                dao.inserir(c);
+            } catch (SQLException ex) {
+                JOptionPane.showMessageDialog(this, "Erro ao salvar: " + ex.getMessage(),
+                                              "Erro", JOptionPane.ERROR_MESSAGE);
+                return;
+            }
             dispose();
-            TelaClientes tela = new TelaClientes(prod, func, mensagem);
-            tela.setVisible(true);
+            onClienteSalvo();
         });
 
         btnCancelar.addActionListener(e -> {
             dispose();
-            new TelaClientes(prod, func, mensagem).setVisible(true);
         });
 
-        // Montagem
         JPanel center = new JPanel(new BorderLayout());
         center.setOpaque(false);
         center.add(formPanel, BorderLayout.CENTER);
@@ -112,4 +122,7 @@ public class TelaCadastroClientes extends JFrame {
 
         painelFundo.add(center, BorderLayout.CENTER);
     }
+
+    /** Será chamado após salvar para recarregar a lista na TelaClientes */
+    protected abstract void onClienteSalvo();
 }

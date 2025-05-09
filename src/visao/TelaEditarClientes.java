@@ -1,5 +1,6 @@
 package visao;
 
+import controle.ClienteDAO;
 import modelo.Clientes;
 import modelo.Funcionario;
 import modelo.Produto;
@@ -7,20 +8,25 @@ import modelo.Produto;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
+import java.sql.SQLException;
+
 import net.miginfocom.swing.MigLayout;
 
-public class TelaEditarClientes extends JFrame {
+public abstract class TelaEditarClientes extends JFrame {
     private JTextField txtNome, txtEmail, txtTelefone;
     private Produto prod;
     private Funcionario func;
     private String mensagem;
     private Clientes cliente;
+    private ClienteDAO dao;
 
     public TelaEditarClientes(Produto prod, Funcionario func, String mensagem, Clientes cliente) {
         this.prod = prod;
         this.func = func;
         this.mensagem = mensagem;
         this.cliente = cliente;
+
+        dao = new ClienteDAO();
 
         setTitle("Editar Cliente");
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
@@ -35,17 +41,17 @@ public class TelaEditarClientes extends JFrame {
 
         // Topo
         JPanel topPanel = new JPanel(new MigLayout("", "[87px][][grow][160px]", "[grow]"));
-        topPanel.setOpaque(false);
+        topPanel.setBackground(new Color(33, 64, 154));
+        topPanel.setPreferredSize(new Dimension(0, 100));
 
         JLabel lblVoltar = new JLabel(new ImageIcon(
             new ImageIcon(getClass().getResource("/img/de-volta.png"))
-                .getImage().getScaledInstance(70, 70, Image.SCALE_SMOOTH)
+                  .getImage().getScaledInstance(70, 70, Image.SCALE_SMOOTH)
         ));
         lblVoltar.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
         lblVoltar.addMouseListener(new MouseAdapter() {
             public void mouseClicked(MouseEvent e) {
                 dispose();
-                new TelaClientes(prod, func, mensagem).setVisible(true);
             }
         });
         topPanel.add(lblVoltar, "cell 0 0,alignx left,aligny center");
@@ -57,13 +63,13 @@ public class TelaEditarClientes extends JFrame {
 
         JLabel lblUser = new JLabel(new ImageIcon(
             new ImageIcon(getClass().getResource("/img/icone.png"))
-                .getImage().getScaledInstance(70, 70, Image.SCALE_SMOOTH)
+                  .getImage().getScaledInstance(70, 70, Image.SCALE_SMOOTH)
         ));
         topPanel.add(lblUser, "cell 3 0,alignx right,aligny center");
 
         painelFundo.add(topPanel, BorderLayout.NORTH);
 
-        // Formulário preenchido
+        // Formulário
         JPanel formPanel = new JPanel(new MigLayout("wrap 2", "[right][grow]", "[][][]"));
         formPanel.setOpaque(false);
         formPanel.add(new JLabel("Nome:"));
@@ -92,16 +98,22 @@ public class TelaEditarClientes extends JFrame {
                 JOptionPane.showMessageDialog(this, "Preencha todos os campos!", "Erro", JOptionPane.ERROR_MESSAGE);
                 return;
             }
-            // opcional: atualizar via DAO
-            // cliente.setNome(nome); cliente.setEmail(email); cliente.setTelefone(telefone);
-            // new ClienteDAO().atualizar(cliente);
+            cliente.setNome(nome);
+            cliente.setEmail(email);
+            cliente.setTelefone(telefone);
+            try {
+                dao.atualizar(cliente);
+            } catch (SQLException ex) {
+                JOptionPane.showMessageDialog(this, "Erro ao atualizar: " + ex.getMessage(),
+                                              "Erro", JOptionPane.ERROR_MESSAGE);
+                return;
+            }
             dispose();
-            new TelaClientes(prod, func, mensagem).setVisible(true);
+            onClienteSalvo();
         });
 
         btnCancelar.addActionListener(e -> {
             dispose();
-            new TelaClientes(prod, func, mensagem).setVisible(true);
         });
 
         JPanel center = new JPanel(new BorderLayout());
@@ -111,4 +123,7 @@ public class TelaEditarClientes extends JFrame {
 
         painelFundo.add(center, BorderLayout.CENTER);
     }
+
+    /** Será chamado após atualizar para recarregar a lista na TelaClientes */
+    protected abstract void onClienteSalvo();
 }
