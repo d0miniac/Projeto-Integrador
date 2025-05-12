@@ -5,24 +5,35 @@ import java.io.Serializable;
 public class Clientes implements Serializable{
 	private static final long serialVersionUID = 1L;
 
-	private String nome;
+	private int idCliente;
+	private String Nome_Clientes;
 	private String email;
 	private String telefone;
 	
-	public Clientes(int i, String string, String string2, String string3) {
-		
+	public Clientes(int id, String Nome_Clientes, String email, String telefone) {
+		this.idCliente = idCliente;
+		this.Nome_Clientes = Nome_Clientes;
+		this.email = email;
+		this.telefone = telefone;
 	}
-	public Clientes(String nome, String email, String telefone) {
-		this.nome = nome;
+	public Clientes(String Nome_Clientes, String email, String telefone) {
+		this.Nome_Clientes = Nome_Clientes;
 		this.email = email;
 		this.telefone = telefone;
 
+
+}
+	public int getidCliente() {
+		return idCliente;
 	}
-	public String getNome() {
-		return nome;
+	public void setidCliente(int id) {
+		this.idCliente = id;
+	}
+	public String getNome_Clientes() {
+		return Nome_Clientes;
 	}
 	public void setNome(String nome) {
-		this.nome = nome;
+		this.Nome_Clientes = Nome_Clientes;
 	}
 	public String getEmail() {
 		return email;
@@ -36,17 +47,6 @@ public class Clientes implements Serializable{
 	public void setTelefone(String telefone) {
 		this.telefone = telefone;
 	}
-	//public static Clientes get(int linhaSelecionada) {
-		// TODO Auto-generated method stub
-	//	return null;
-	//}
-	public void setId(int int1) {
-		// TODO Auto-generated method stub
-		
-	}
-	public int getId() {
-		// TODO Auto-generated method stub
-		return (Integer) null;
-	}
+
 	
 }

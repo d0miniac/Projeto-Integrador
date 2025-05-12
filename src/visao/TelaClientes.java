@@ -39,7 +39,6 @@ public class TelaClientes extends JFrame {
         setLocationRelativeTo(null);
 
         try {
-            dao = new ClienteDAO();
             listaClientes = dao.listarTodos();
         } catch (SQLException ex) {
             JOptionPane.showMessageDialog(this,
@@ -156,7 +155,7 @@ public class TelaClientes extends JFrame {
         modeloTabela.setRowCount(0);
         for (Clientes c : listaClientes) {
             modeloTabela.addRow(new Object[]{
-                c.getId(), c.getNome(), c.getEmail(), c.getTelefone()
+                c.getidCliente(), c.getNome_Clientes(), c.getEmail(), c.getTelefone()
             });
         }
     }
@@ -167,21 +166,24 @@ public class TelaClientes extends JFrame {
         else sorter.setRowFilter(RowFilter.regexFilter("(?i)" + Pattern.quote(txt), 1));
     }
 
+    
     private void abrirCadastro() {
-        dispose();
         new TelaCadastroClientes(prod, func, mensagem) {
             @Override
             protected void onClienteSalvo() {
                 try {
                     listaClientes = dao.listarTodos();
+                    carregarTabela();
                 } catch (SQLException ex) {
-                    ex.printStackTrace();
+                    JOptionPane.showMessageDialog(null, 
+                    		"Erro ao regarregar clientes:  " + ex.getMessage(),
+                    		"Erro",JOptionPane.ERROR_MESSAGE);
                 }
-                new TelaClientes(prod, func, mensagem).setVisible(true);
             }
         }.setVisible(true);
     }
 
+    
     private void abrirEdicao() {
         int row = tabelaClientes.getSelectedRow();
         if (row < 0) {
@@ -192,16 +194,17 @@ public class TelaClientes extends JFrame {
         }
         int modelRow = tabelaClientes.convertRowIndexToModel(row);
         Clientes c = listaClientes.get(modelRow);
-        dispose();
         new TelaEditarClientes(prod, func, mensagem, c) {
             @Override
             protected void onClienteSalvo() {
                 try {
                     listaClientes = dao.listarTodos();
+                    carregarTabela();
                 } catch (SQLException ex) {
-                    ex.printStackTrace();
+                    JOptionPane.showMessageDialog(null,
+                        "Erro ao recarregar clientes: " + ex.getMessage(),
+                        "Erro", JOptionPane.ERROR_MESSAGE);
                 }
-                new TelaClientes(prod, func, mensagem).setVisible(true);
             }
         }.setVisible(true);
     }
@@ -221,7 +224,7 @@ public class TelaClientes extends JFrame {
             JOptionPane.YES_NO_OPTION);
         if (opt == JOptionPane.YES_OPTION) {
             try {
-                dao.deletar(c.getId());
+                dao.deletar(c.getidCliente());
                 listaClientes = dao.listarTodos();
                 carregarTabela();
             } catch (SQLException ex) {

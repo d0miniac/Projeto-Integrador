@@ -73,7 +73,7 @@ public abstract class TelaEditarClientes extends JFrame {
         JPanel formPanel = new JPanel(new MigLayout("wrap 2", "[right][grow]", "[][][]"));
         formPanel.setOpaque(false);
         formPanel.add(new JLabel("Nome:"));
-        txtNome = new JTextField(cliente.getNome());
+        txtNome = new JTextField(cliente.getNome_Clientes());
         formPanel.add(txtNome, "growx");
         formPanel.add(new JLabel("Email:"));
         txtEmail = new JTextField(cliente.getEmail());
