@@ -26,13 +26,13 @@ public class Clientes implements Serializable{
 	public int getidCliente() {
 		return idCliente;
 	}
-	public void setidCliente(int id) {
-		this.idCliente = id;
+	public void setidCliente(int idCliente) {
+		this.idCliente = idCliente;
 	}
 	public String getNome_Clientes() {
 		return Nome_Clientes;
 	}
-	public void setNome(String nome) {
+	public void setNome(String Nome_Clientes) {
 		this.Nome_Clientes = Nome_Clientes;
 	}
 	public String getEmail() {
