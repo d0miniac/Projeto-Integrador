@@ -100,6 +100,11 @@ public class Produto {
         this.foto = foto;
     
     }
+
+	public String getNome() {
+		// TODO Auto-generated method stub
+		return null;
+	}
    }
 
 

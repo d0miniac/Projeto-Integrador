@@ -97,32 +97,6 @@ public class TelaMenu extends JFrame {
             }
         });
 
-        btnFuncionarios = new ImageButton("src/img/icone_funcionarios.png");
-        btnFuncionarios.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-                if (func.getPerfil().equals("Admin")) {
-                    // Acessa a tela de funcionários se o perfil for "Admin"
-                    dispose();
-                    TelaFuncionarios telaFuncionarios = null;
-                    try {
-                        telaFuncionarios = new TelaFuncionarios(prod,func, mensagem);
-                    } catch (SQLException e1) {
-                        e1.printStackTrace();
-                    }
-                    telaFuncionarios.setVisible(true);
-                } else {
-                    // Exibe mensagem de permissão negada para usuários não-admin
-                	new TelaErro( "Seu perfil não tem permissão para acessar a tela de funcionários.", 0);
-                  
-                    dispose();
-                    TelaMenu telaMenu = new TelaMenu(prod, func, mensagem);
-                    telaMenu.setVisible(true);
-                    telaMenu.setSize(1215, 850);
-                    telaMenu.setLocationRelativeTo(null);
-                }
-            }
-        });
-
         JButton btnHistorico = new ImageButton("src/img/icone_historico.png");
         btnHistorico.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
@@ -166,10 +140,36 @@ public class TelaMenu extends JFrame {
 
         buttonPanel.add(btnFornecedores, "cell 3 0 2 1,grow");
         buttonPanel.add(btnHistorico, "cell 5 0 2 1,grow");
-        buttonPanel.add(btnFuncionarios, "cell 2 1 2 1,grow");
         buttonPanel.add(btnProdutos, "cell 1 0 2 1,grow");
-        buttonPanel.add(btnVendas, "cell 4 1 2 1,grow");
-        buttonPanel.add(btnClientes, "cell 1 1,grow");
+        
+                btnFuncionarios = new ImageButton("src/img/icone_funcionarios.png");
+                btnFuncionarios.addActionListener(new ActionListener() {
+                    public void actionPerformed(ActionEvent e) {
+                        if (func.getPerfil().equals("Admin")) {
+                            // Acessa a tela de funcionários se o perfil for "Admin"
+                            dispose();
+                            TelaFuncionarios telaFuncionarios = null;
+                            try {
+                                telaFuncionarios = new TelaFuncionarios(prod,func, mensagem);
+                            } catch (SQLException e1) {
+                                e1.printStackTrace();
+                            }
+                            telaFuncionarios.setVisible(true);
+                        } else {
+                            // Exibe mensagem de permissão negada para usuários não-admin
+                        	new TelaErro( "Seu perfil não tem permissão para acessar a tela de funcionários.", 0);
+                          
+                            dispose();
+                            TelaMenu telaMenu = new TelaMenu(prod, func, mensagem);
+                            telaMenu.setVisible(true);
+                            telaMenu.setSize(1215, 850);
+                            telaMenu.setLocationRelativeTo(null);
+                        }
+                    }
+                });
+                buttonPanel.add(btnFuncionarios, "cell 3 1 2 1,grow");
+        buttonPanel.add(btnVendas, "cell 5 1 2 1,grow");
+        buttonPanel.add(btnClientes, "cell 1 1 2 1,grow");
 
 
         mainPanel.add(topPanel, BorderLayout.NORTH);

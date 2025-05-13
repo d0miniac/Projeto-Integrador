@@ -48,6 +48,15 @@ public class TelaVendas extends JFrame {
     private void criarPainelSuperior() {
         panelVazio = new JPanel(new FlowLayout(FlowLayout.LEFT));
         panelVazio.setPreferredSize(new Dimension(getWidth(), 100));
+        JButton btnFinalizar = new JButton("Finalizar Compra");
+        btnFinalizar.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                new TelaPagamento(funcionario).setVisible(true);
+                dispose(); // Fecha a tela de vendas
+            }
+        });
+        panelVazio.add(btnFinalizar);
+
 
         // Botão de voltar
         JLabel lblSeta = new JLabel();

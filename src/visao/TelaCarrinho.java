@@ -56,7 +56,7 @@ public class TelaCarrinho extends JFrame {
 		setSize(1215, 850);
 		
 		listaItens = new ArrayList<>();
-		listaItens = c.getItens();
+		listaItens = (ArrayList<ItemVenda>) c.getItens();
 		
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 450, 300);

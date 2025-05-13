@@ -1,58 +1,42 @@
 package modelo;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class Carrinho {
-	public ArrayList<ItemVenda> itens = new ArrayList<>();
+    private static Carrinho instancia;
+    private List<ItemVenda> itens;
 
-	private Carrinho() {
-	}
+    private Carrinho() {
+        itens = new ArrayList<>();
+    }
 
-	private static Carrinho unicaInstancia = null;
+    public static Carrinho getInstancia() {
+        if (instancia == null) {
+            instancia = new Carrinho();
+        }
+        return instancia;
+    }
 
-	public static Carrinho getInstancia() {
-		if (unicaInstancia == null) {
-			unicaInstancia = new Carrinho();
-		}
-		return unicaInstancia;
-	}
+    public List<ItemVenda> getItens() {
+        return itens;
+    }
 
-	public void adicionar(ItemVenda iv) {
+    public void adicionarItem(ItemVenda item) {
+        itens.add(item);
+    }
 
-		itens.add(iv);
+    public void removerItem(ItemVenda item) {
+        itens.remove(item);
+    }
 
-	}
+    public void limpar() {
+        itens.clear();
+    }
 
-	public void remover(Long id) {
-		itens.removeIf(item -> item.getId() == id);
-
-	}
-
-	public boolean verificar(Long id) {
-		int x = 0;
-		for (ItemVenda itemVenda : itens) {
-			if (itemVenda.getId() == id) {
-				x = 1;
-			}
-		}
-		if (x == 0) {
-			return false;
-		} else {
-			return true;
-		}
-	}
-
-	public ArrayList<ItemVenda> getItens() {
-		return itens;
-	}
-
-	public void setItens(ArrayList<ItemVenda> itens) {
-		this.itens = itens;
-	}
-
-	public void adicionarItem(ItemVenda novoItem) {
-		// TODO Auto-generated method stub
-		
-	}
-
+    public double getTotal() {
+        return itens.stream()
+                .mapToDouble(i -> i.getFoto().getPreco() * i.getQuantidade())
+                .sum();
+    }
 }

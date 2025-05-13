@@ -57,7 +57,7 @@ public class ProdutoDAO {
 	            Produto p = new Produto();
 	         //   p.setNome(rs.getString("Nome"));
 	            p.setId(rs.getLong("idProduto"));
-	            p.setCategoria(Categoria.valueOf(rs.getString("Categoria").toUpperCase()));
+	            p.setCategoria(Categoria.getCategoriaPorDescricao(rs.getString("Categoria").toUpperCase()));
 	            p.setCor(Cor.getCorPorDescricao(rs.getString("Cor")));
 	            p.setTamanho(Tamanho.getTamanhoPorDescricao(rs.getString("Tamanho")));
 	            p.setPreco(rs.getFloat("Preco"));
