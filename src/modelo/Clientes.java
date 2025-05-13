@@ -10,7 +10,7 @@ public class Clientes implements Serializable{
 	private String email;
 	private String telefone;
 	
-	public Clientes(int id, String Nome_Clientes, String email, String telefone) {
+	public Clientes(int idCliente, String Nome_Clientes, String email, String telefone) {
 		this.idCliente = idCliente;
 		this.Nome_Clientes = Nome_Clientes;
 		this.email = email;

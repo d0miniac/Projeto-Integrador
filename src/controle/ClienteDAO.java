@@ -7,10 +7,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class ClienteDAO {
-    
 
     public ClienteDAO()  {
-        
     }
 
     private Connection getConnection() throws SQLException {
@@ -18,15 +16,20 @@ public class ClienteDAO {
     }
 
     public void inserir(Clientes c) throws SQLException {
+        // Removido o campo idClientes do INSERT
         String sql = "INSERT INTO clientes (Nome_Clientes, email, telefone) VALUES (?, ?, ?)";
         try (Connection conn = getConnection();
              PreparedStatement ps = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
+
             ps.setString(1, c.getNome_Clientes());
             ps.setString(2, c.getEmail());
             ps.setString(3, c.getTelefone());
             ps.executeUpdate();
+
             try (ResultSet rs = ps.getGeneratedKeys()) {
-                if (rs.next()) c.setidCliente(rs.getInt(1));
+                if (rs.next()) {
+                    c.setidCliente(rs.getInt(1)); 
+                }
             }
         }
     }
