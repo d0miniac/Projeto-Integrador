@@ -240,19 +240,6 @@ public class TelaProdutos extends JFrame {
 		btnPesquisa.setBorder(new LineBorder(new Color(123, 150, 212), 2, true));
 	}
 
-//		JButton btnCarrinho = new JButton("Carrinho");
-//		btnCarrinho.addActionListener(new ActionListener() {
-//			public void actionPerformed(ActionEvent e) {
-//				adicionarCarrinho();
-//			}
-//		});
-//		btnCarrinho.setBackground(new Color(243, 244, 240));
-//		btnCarrinho.setFont(new Font("Tahoma", Font.PLAIN, 24));
-//		btnCarrinho.setMinimumSize(new Dimension(150, 30));
-//		btnCarrinho.setMaximumSize(new Dimension(150, 30));
-//		btnCarrinho.setBorder(new LineBorder(new Color(123, 150, 212), 2, true));
-//		panelComponentes.add(btnCarrinho, "cell 4 1");
-//	}
 	
 	public void MostrarProdutos(Funcionario func) {
 	    for (Produto produto : listaProdutos) {
@@ -269,11 +256,7 @@ public class TelaProdutos extends JFrame {
 	        JLabel lblImage = new JLabel(new ImageIcon(image));
 	        btnProduto.add(lblImage, BorderLayout.CENTER);
 
-	        // Definir nome do produto
-	      //  JLabel lblNome = new JLabel(produto.getNome(), SwingConstants.CENTER);
-	        //lblNome.setFont(new Font("Tahoma", Font.PLAIN, 14));
-	        //lblNome.setPreferredSize(new Dimension(350, 50));
-	        //btnProduto.add(lblNome, BorderLayout.SOUTH);
+	       
 
 	        // Botão de adicionar ao carrinho
 	        JButton btnAdicionarCarrinho = new JButton("Adicionar ao Carrinho");

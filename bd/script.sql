@@ -54,7 +54,6 @@ DROP TABLE IF EXISTS `clientes`;
 CREATE TABLE `clientes` (
   `idCliente` int NOT NULL AUTO_INCREMENT,
   `Nome_Clientes` varchar(45) NOT NULL,
-  `CPF` varchar(30) NOT NULL,
   `Email` varchar(40) NOT NULL,
   `Telefone` varchar(30) NOT NULL,
   PRIMARY KEY (`idCliente`)

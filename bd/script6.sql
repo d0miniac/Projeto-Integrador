@@ -1,1 +1,0 @@
-SELECT * FROM armariodigital.clientes;
