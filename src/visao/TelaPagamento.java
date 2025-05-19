@@ -7,7 +7,12 @@ import javax.swing.border.EmptyBorder;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 import modelo.*;
+
+import java.time.LocalDate;
 import java.time.YearMonth;
+import java.time.format.DateTimeFormatter;
+
+import net.miginfocom.swing.MigLayout;
 
 public class TelaPagamento extends JFrame {
 
@@ -15,6 +20,8 @@ public class TelaPagamento extends JFrame {
     private JLabel lblTotal;
     private JButton btnPagar;
     private JTextField txtCartao, txtNome, txtValidade, txtCVV;
+    private JLabel lblDataPagamento;
+
 
     public TelaPagamento(Funcionario funcionario) {
         setTitle("Pagamento");
@@ -26,22 +33,30 @@ public class TelaPagamento extends JFrame {
         Carrinho carrinho = Carrinho.getInstancia();
 
         contentPane = new JPanel();
-        contentPane.setLayout(new BorderLayout(10, 10));
+        contentPane.setBackground(new Color(33, 64, 154));
         contentPane.setBorder(new EmptyBorder(20, 20, 20, 20));
         setContentPane(contentPane);
+        contentPane.setLayout(new MigLayout("", "[452px]", "[26px][348px][][27px]"));
 
         JLabel lblTitulo = new JLabel("Finalizar Pagamento", SwingConstants.CENTER);
+        lblTitulo.setForeground(new Color(255, 255, 255));
         lblTitulo.setFont(new Font("Arial", Font.BOLD, 22));
-        contentPane.add(lblTitulo, BorderLayout.NORTH);
+        contentPane.add(lblTitulo, "cell 0 0,growx,aligny top");
 
-        JPanel panelCentro = new JPanel(new GridLayout(5, 2, 10, 10));
+        JPanel panelCentro = new JPanel();
+        panelCentro.setBackground(new Color(255, 255, 255));
         panelCentro.setBorder(new EmptyBorder(10, 0, 10, 0));
 
         // Campos de entrada
         txtCartao = new JTextField();
+        txtCartao.setForeground(new Color(0, 0, 0));
+        txtCartao.setBackground(new Color(209, 209, 233));
         txtNome = new JTextField();
+        txtNome.setBackground(new Color(209, 209, 233));
         txtValidade = new JTextField();
+        txtValidade.setBackground(new Color(209, 209, 233));
         txtCVV = new JTextField();
+        txtCVV.setBackground(new Color(209, 209, 233));
 
         // Adiciona listeners de validação
         DocumentListener docListener = new DocumentListener() {
@@ -54,43 +69,69 @@ public class TelaPagamento extends JFrame {
         txtNome.getDocument().addDocumentListener(docListener);
         txtValidade.getDocument().addDocumentListener(docListener);
         txtCVV.getDocument().addDocumentListener(docListener);
+        panelCentro.setLayout(new MigLayout("", "[217px][][][217px]", "[57px][57px][57px][57px][57px][]"));
+        
+      
+        JLabel label = new JLabel("Número do Cartão:");
+        label.setFont(new Font("Tahoma", Font.BOLD, 15));
+        label.setHorizontalAlignment(SwingConstants.CENTER);
+        panelCentro.add(label, "cell 0 0,grow");
+        panelCentro.add(txtCartao, "cell 3 0,grow");
 
-        panelCentro.add(new JLabel("Número do Cartão:"));
-        panelCentro.add(txtCartao);
+        JLabel label_1 = new JLabel("Nome no Cartão:");
+        label_1.setFont(new Font("Tahoma", Font.BOLD, 15));
+        label_1.setHorizontalAlignment(SwingConstants.CENTER);
+        panelCentro.add(label_1, "cell 0 1,grow");
+        panelCentro.add(txtNome, "cell 3 1,grow");
 
-        panelCentro.add(new JLabel("Nome no Cartão:"));
-        panelCentro.add(txtNome);
+        JLabel label_2 = new JLabel("Validade (MM/AA):");
+        label_2.setFont(new Font("Tahoma", Font.BOLD, 15));
+        label_2.setHorizontalAlignment(SwingConstants.CENTER);
+        panelCentro.add(label_2, "cell 0 2,grow");
+        panelCentro.add(txtValidade, "cell 3 2,grow");
 
-        panelCentro.add(new JLabel("Validade (MM/AA):"));
-        panelCentro.add(txtValidade);
+        JLabel label_3 = new JLabel("CVV:");
+        label_3.setFont(new Font("Tahoma", Font.BOLD, 15));
+        label_3.setHorizontalAlignment(SwingConstants.CENTER);
+        panelCentro.add(label_3, "cell 0 3,grow");
+        panelCentro.add(txtCVV, "cell 3 3,grow");
 
-        panelCentro.add(new JLabel("CVV:"));
-        panelCentro.add(txtCVV);
-
-        panelCentro.add(new JLabel("Total da Compra:"));
+        JLabel label_4 = new JLabel("Total da Compra:");
+        label_4.setFont(new Font("Tahoma", Font.BOLD, 15));
+        label_4.setHorizontalAlignment(SwingConstants.CENTER);
+        panelCentro.add(label_4, "cell 0 4,grow");
         lblTotal = new JLabel("R$ " + String.format("%.2f", calcularTotal(carrinho)), SwingConstants.LEFT);
         lblTotal.setFont(new Font("Arial", Font.BOLD, 14));
-        panelCentro.add(lblTotal);
+        panelCentro.add(lblTotal, "cell 3 4,grow");
+        
+        JLabel labelData = new JLabel("Data de Pagamento:");
+        labelData.setFont(new Font("Tahoma", Font.BOLD, 15));
+        labelData.setHorizontalAlignment(SwingConstants.CENTER);
+        panelCentro.add(labelData, "cell 0 5,grow");
 
-        contentPane.add(panelCentro, BorderLayout.CENTER);
+        lblDataPagamento = new JLabel(LocalDate.now().format(DateTimeFormatter.ofPattern("dd/MM/yyyy")));
+        lblDataPagamento.setFont(new Font("Arial", Font.BOLD, 14));
+        panelCentro.add(lblDataPagamento, "cell 3 5,grow");
 
-        btnPagar = new JButton("Pagar");
-        btnPagar.setFont(new Font("Arial", Font.BOLD, 16));
-        btnPagar.setBackground(new Color(0, 153, 76));
-        btnPagar.setForeground(Color.WHITE);
-        btnPagar.setFocusPainted(false);
-        btnPagar.setEnabled(false); // Começa desativado
 
-        btnPagar.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-                carrinho.limpar();
-                JOptionPane.showMessageDialog(null, "Pagamento realizado com sucesso!");
-                new TelaMenu(null, funcionario, "Compra finalizada com sucesso").setVisible(true);
-                dispose();
-            }
-        });
-
-        contentPane.add(btnPagar, BorderLayout.SOUTH);
+        contentPane.add(panelCentro, "cell 0 1,alignx left,growy");
+                
+                        btnPagar = new JButton("Pagar");
+                        panelCentro.add(btnPagar, "cell 2 6");
+                        btnPagar.setFont(new Font("Arial", Font.BOLD, 16));
+                        btnPagar.setBackground(new Color(209, 209, 233));
+                        btnPagar.setForeground(Color.WHITE);
+                        btnPagar.setFocusPainted(false);
+                        btnPagar.setEnabled(false); // Começa desativado
+                
+                        btnPagar.addActionListener(new ActionListener() {
+                            public void actionPerformed(ActionEvent e) {
+                                carrinho.limpar();
+                                JOptionPane.showMessageDialog(null, "Pagamento realizado com sucesso!");
+                                new TelaMenu(null, funcionario, "Compra finalizada com sucesso").setVisible(true);
+                                dispose();
+                            }
+                        });
     }
 
     private void validarCampos() {
