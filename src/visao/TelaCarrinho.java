@@ -1,104 +1,95 @@
 package visao;
 
-import java.awt.Dimension;
-import java.awt.EventQueue;
-import java.awt.Font;
+import java.awt.*;
+import java.awt.event.*;
 import java.util.ArrayList;
 
-import javax.swing.JFrame;
-import javax.swing.JLabel;
-import javax.swing.JPanel;
+import javax.swing.*;
 import javax.swing.border.EmptyBorder;
 
 import modelo.Carrinho;
 import modelo.ItemVenda;
-import java.awt.GridLayout;
-import java.awt.Image;
-
-import javax.swing.ImageIcon;
-import javax.swing.JButton;
-import javax.swing.SwingConstants;
-import javax.swing.BoxLayout;
-import java.awt.BorderLayout;
-import java.awt.Color;
-
-import javax.swing.JScrollPane;
 import net.miginfocom.swing.MigLayout;
 
 public class TelaCarrinho extends JFrame {
 
-	private JPanel contentPane;
-	private Carrinho carrinho;
-	ArrayList<ItemVenda> listaItens;
+    private JPanel contentPane;
+    private Carrinho carrinho;
+    private ArrayList<ItemVenda> listaItens;
 
-	/**
-	 * Launch the application.
-	 */
-//	public static void main(String[] args) {
-//		EventQueue.invokeLater(new Runnable() {
-//			public void run() {
-//				try {
-//					TelaCarrinho frame = new TelaCarrinho();
-//					frame.setVisible(true);
-//				} catch (Exception e) {
-//					e.printStackTrace();
-//				}
-//			}
-//		});
-//	}
+    public TelaCarrinho(Carrinho c) {
+        this.carrinho = c;
+        this.listaItens = new ArrayList<>(c.getItens());
 
-	/**
-	 * Create the frame.
-	 */
-	public TelaCarrinho(Carrinho c){
-		setLocationRelativeTo(null);
-		setResizable(false);
-		setSize(1215, 850);
-		
-		listaItens = new ArrayList<>();
-		listaItens = (ArrayList<ItemVenda>) c.getItens();
-		
-		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		setBounds(100, 100, 450, 300);
-		contentPane = new JPanel();
-		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
-		
-		setContentPane(contentPane);
-		contentPane.setLayout(new BoxLayout(contentPane, BoxLayout.X_AXIS));
-		
-		JPanel panel = new JPanel();
-		contentPane.add(panel);
-		
-		
-		
-		panel.setLayout(null);
-		JButton btnNewButton = new JButton("Voltar");
-		btnNewButton.setBounds(90, 5, 77, 25);
-		panel.add(btnNewButton);
-		
-		JPanel panel_1 = new JPanel();
-		contentPane.add(panel_1);
-		panel_1.setLayout(new BorderLayout(0, 0));
-		
-		JScrollPane scrollPane = new JScrollPane();
-		panel_1.add(scrollPane, BorderLayout.CENTER);
-		
-		JPanel panel_2 = new JPanel();
-		scrollPane.setViewportView(panel_2);
-		panel_2.setBackground(new Color(243, 244, 240));
-		panel_2.setLayout(new MigLayout("wrap 3", "[grow]", "[]"));
-		for (ItemVenda item : listaItens) {
-			ImageIcon imageIcon = new ImageIcon();
-	        Image image = imageIcon.getImage().getScaledInstance(350, 350, Image.SCALE_SMOOTH);
-	        JLabel lblItemFoto = new JLabel(new ImageIcon(image));
-			JLabel lblItemNome = new JLabel(item.getNome());
-			contentPane.add(lblItemFoto);
-			lblItemNome.setFont(new Font("Tahoma", Font.PLAIN, 14));
-	        lblItemNome.setPreferredSize(new Dimension(30, 30));
-			contentPane.add(lblItemNome);
-			JLabel lblItemQuantidade = new JLabel(String.valueOf(item.getQuantidade())+"x");
-			contentPane.add(lblItemQuantidade);
-		}
-	}
+        setTitle("Carrinho de Compras");
+        setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+        setSize(1215, 850);
+        setLocationRelativeTo(null);
+        setResizable(false);
 
+        contentPane = new JPanel(new BorderLayout());
+        contentPane.setBorder(new EmptyBorder(10, 10, 10, 10));
+        setContentPane(contentPane);
+
+        criarCabecalho();
+        criarPainelItens();
+    }
+
+    private void criarCabecalho() {
+        JPanel painelTopo = new JPanel(new FlowLayout(FlowLayout.LEFT));
+        painelTopo.setBackground(new Color(240, 240, 240));
+
+        JButton btnVoltar = new JButton("Voltar");
+        btnVoltar.addActionListener(e -> dispose());
+        painelTopo.add(btnVoltar);
+
+        JLabel lblTitulo = new JLabel("Itens no Carrinho");
+        lblTitulo.setFont(new Font("Arial", Font.BOLD, 24));
+        painelTopo.add(lblTitulo);
+
+        contentPane.add(painelTopo, BorderLayout.NORTH);
+    }
+
+    private void criarPainelItens() {
+        JPanel painelCentro = new JPanel(new BorderLayout());
+        JScrollPane scrollPane = new JScrollPane();
+        scrollPane.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
+        painelCentro.add(scrollPane, BorderLayout.CENTER);
+
+        JPanel painelItens = new JPanel();
+        painelItens.setBackground(Color.WHITE);
+        painelItens.setLayout(new MigLayout("wrap 3", "[grow]", "[]")); // 3 colunas
+        scrollPane.setViewportView(painelItens);
+
+        for (ItemVenda item : listaItens) {
+            JPanel cardItem = new JPanel();
+            cardItem.setPreferredSize(new Dimension(350, 400));
+            cardItem.setBackground(Color.WHITE);
+            cardItem.setLayout(new BorderLayout());
+            cardItem.setBorder(BorderFactory.createLineBorder(Color.LIGHT_GRAY));
+
+            // Imagem
+            ImageIcon icon = new ImageIcon(item.getFoto().getFoto());
+            Image image = icon.getImage().getScaledInstance(350, 300, Image.SCALE_SMOOTH);
+            JLabel lblFoto = new JLabel(new ImageIcon(image));
+            cardItem.add(lblFoto, BorderLayout.CENTER);
+
+            // Detalhes
+            JPanel painelDetalhes = new JPanel();
+            painelDetalhes.setLayout(new BoxLayout(painelDetalhes, BoxLayout.Y_AXIS));
+            painelDetalhes.setBackground(Color.WHITE);
+            painelDetalhes.setBorder(new EmptyBorder(5, 10, 5, 10));
+
+            JLabel lblNome = new JLabel("Produto: " + item.getNome());
+            JLabel lblQuantidade = new JLabel("Quantidade: " + item.getQuantidade());
+            painelDetalhes.add(lblNome);
+            painelDetalhes.add(lblQuantidade);
+
+            cardItem.add(painelDetalhes, BorderLayout.SOUTH);
+
+            painelItens.add(cardItem);
+        }
+
+        contentPane.add(painelCentro, BorderLayout.CENTER);
+    }
 }

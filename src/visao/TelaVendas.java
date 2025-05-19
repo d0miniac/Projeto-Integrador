@@ -48,6 +48,7 @@ public class TelaVendas extends JFrame {
     private void criarPainelSuperior() {
         panelVazio = new JPanel(new FlowLayout(FlowLayout.LEFT));
         panelVazio.setPreferredSize(new Dimension(getWidth(), 100));
+
         JButton btnFinalizar = new JButton("Finalizar Compra");
         btnFinalizar.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
@@ -56,7 +57,6 @@ public class TelaVendas extends JFrame {
             }
         });
         panelVazio.add(btnFinalizar);
-
 
         // Botão de voltar
         JLabel lblSeta = new JLabel();
@@ -85,10 +85,19 @@ public class TelaVendas extends JFrame {
             }
         });
 
+        // Botão de ver carrinho
+        JButton btnVerCarrinho = new JButton("Ver Carrinho");
+        btnVerCarrinho.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                new TelaCarrinho(Carrinho.getInstancia()).setVisible(true);
+            }
+        });
+
         panelVazio.add(lblSeta);
         panelVazio.add(new JLabel("Categoria:"));
         panelVazio.add(comboCategorias);
         panelVazio.add(btnFiltrar);
+        panelVazio.add(btnVerCarrinho); // <- Aqui o botão é adicionado
 
         contentPane_1.add(panelVazio, BorderLayout.NORTH);
     }
@@ -128,7 +137,6 @@ public class TelaVendas extends JFrame {
             JPanel panelDetalhes = new JPanel();
             panelDetalhes.setLayout(new BoxLayout(panelDetalhes, BoxLayout.Y_AXIS));
             panelDetalhes.setBackground(Color.WHITE);
-           // panelDetalhes.add(new JLabel("Produto: " + prod.getNome()));
             panelDetalhes.add(new JLabel("Preço: R$ " + prod.getPreco()));
             panelDetalhes.add(new JLabel("Categoria: " + prod.getCategoria().getDescricao()));
 
@@ -156,6 +164,7 @@ public class TelaVendas extends JFrame {
 
         exibirProdutos(filtrados);
     }
+
     private void adicionarAoCarrinho(Produto produto) {
         Carrinho carrinho = Carrinho.getInstancia();
         ItemVenda itemExistente = carrinho.getItens().stream()
