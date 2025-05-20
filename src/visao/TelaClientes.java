@@ -6,6 +6,7 @@ import modelo.Funcionario;
 import modelo.Produto;
 
 import javax.swing.*;
+import javax.swing.border.LineBorder;
 import javax.swing.table.*;
 import java.awt.*;
 import java.awt.event.*;
@@ -92,13 +93,14 @@ public class TelaClientes extends JFrame {
         painelCentro.setOpaque(false);
 
         txtFiltro = new JTextField();
-        txtFiltro.setUI(new HintTextFieldUI("Pesquise por nome, email ou telefone", true));
+        txtFiltro.setUI(new HintTextFieldUI("Pesquise por nome, email ou telefone"));
         txtFiltro.setFont(new Font("Tahoma", Font.PLAIN, 18));
         txtFiltro.setBorder(BorderFactory.createLineBorder(new Color(123, 150, 212), 2, true));
-        txtFiltro.setPreferredSize(new Dimension(450, 50));
+        txtFiltro.setPreferredSize(new Dimension(450, 45));
         txtFiltro.setColumns(90);
         painelCentro.add(txtFiltro, "cell 0 0, alignx left"); // Alinha à esquerda e encaixa melhor no MigLayout
-        
+		//txtFiltro.setPreferredSize(new Dimension(450, 45));
+
         
         JButton btnPesquisar = new JButton("PESQUISAR");
         styleButton(btnPesquisar);
@@ -111,27 +113,32 @@ public class TelaClientes extends JFrame {
         tabelaClientes = new JTable(modeloTabela);
         sorter = new TableRowSorter<>(modeloTabela);
         tabelaClientes.setRowSorter(sorter);
-        tabelaClientes.setFont(new Font("Tahoma", Font.PLAIN, 16));
-        tabelaClientes.setRowHeight(28);
+        
+        tabelaClientes.setFont(new Font("Tahoma", Font.PLAIN, 15));
+        tabelaClientes.setRowHeight(20);
         tabelaClientes.setBackground(new Color(123, 150, 212));
         tabelaClientes.setForeground(Color.WHITE);
-
+        tabelaClientes.setGridColor(new Color(123, 150, 212));
+        
+        
         JTableHeader header = tabelaClientes.getTableHeader();
-        header.setFont(new Font("Tahoma", Font.BOLD, 18));
-        header.setBackground(new Color(243, 244, 240));
-        header.setForeground(new Color(180, 196, 250));
+        header.setFont(new Font("Tahoma", Font.PLAIN, 18));
+        header.setBackground(Color.WHITE);
+        header.setForeground(new Color(123, 150, 212));
 
         painelCentro.add(new JScrollPane(tabelaClientes), "cell 0 2 2 1, grow, push");
 
         contentPane.add(painelCentro, BorderLayout.CENTER);
 
         // --- Rodapé (Botões) ---
-        JPanel painelBotoes = new JPanel(new FlowLayout(FlowLayout.LEFT, 20, 0));
+        JPanel painelBotoes = new JPanel(new MigLayout("insets 0", "[]10[]10[]", "[]"));
         painelBotoes.setOpaque(false);
 
         JButton btnCadastrar = new JButton("Cadastrar");
         styleButton(btnCadastrar);
         btnCadastrar.addActionListener(e -> abrirCadastro());
+		btnCadastrar.setBorder(new LineBorder(new Color(123, 150, 212), 2, true));
+
 
         JButton btnAlterar = new JButton("Alterar");
         styleButton(btnAlterar);
