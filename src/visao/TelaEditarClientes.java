@@ -58,7 +58,7 @@ public abstract class TelaEditarClientes extends JFrame {
         barraTopo.add(lblVoltar, "cell 0 0,alignx left,aligny center");
 
         JLabel lblTitulo = new JLabel("Editar Cliente");
-        lblTitulo.setFont(new Font("Arial", Font.BOLD, 30));
+        lblTitulo.setFont(new Font("Arial", Font.BOLD, 36));
         lblTitulo.setForeground(Color.WHITE);
         barraTopo.add(lblTitulo, "growx, alignx center");
 
