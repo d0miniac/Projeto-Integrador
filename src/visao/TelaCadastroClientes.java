@@ -33,14 +33,15 @@ public abstract class TelaCadastroClientes extends JFrame {
         setResizable(false);
 
         // Fundo
-        ImagePanel painelFundo = new ImagePanel("/img/bgCadastro.png");
+        ImagePanel painelFundo = new ImagePanel("/img/Fundo.png");
         painelFundo.setLayout(new BorderLayout());
         setContentPane(painelFundo);
 
         // Topo
-        JPanel topPanel = new JPanel(new MigLayout("", "[87px][][grow][160px]", "[grow]"));
-        topPanel.setBackground(new Color(33, 64, 154));
-        topPanel.setPreferredSize(new Dimension(0, 100));
+        ImageIcon imgBarra = new ImageIcon(getClass().getResource("/img/barraParteDeCima.png"));
+        JLabel barraTopo = new JLabel(imgBarra);
+        barraTopo.setLayout(new MigLayout("", "10[]10[grow]10[]10", "10[80]10"));
+        barraTopo.setPreferredSize(new Dimension(0, 100));
 
         // Voltar
         JLabel lblVoltar = new JLabel(new ImageIcon(
@@ -53,22 +54,22 @@ public abstract class TelaCadastroClientes extends JFrame {
                 dispose();
             }
         });
-        topPanel.add(lblVoltar, "cell 0 0,alignx left,aligny center");
+        barraTopo.add(lblVoltar, "cell 0 0,alignx left,aligny center");
 
         // Título
-        JLabel lblTitulo = new JLabel("Cadastrar Cliente", SwingConstants.CENTER);
+        JLabel lblTitulo = new JLabel("Cadastrar Cliente");
         lblTitulo.setFont(new Font("Arial", Font.BOLD, 30));
         lblTitulo.setForeground(Color.WHITE);
-        topPanel.add(lblTitulo, "cell 1 0 2 1,alignx center,aligny center");
+        barraTopo.add(lblTitulo, "growx, alignx center");
 
         // Ícone usuário
         JLabel lblUser = new JLabel(new ImageIcon(
-            new ImageIcon(getClass().getResource("/img/icone.png"))
-                  .getImage().getScaledInstance(70, 70, Image.SCALE_SMOOTH)
+            new ImageIcon(getClass().getResource("/img/armariodigital.png"))
+                  .getImage().getScaledInstance(150, 80, Image.SCALE_SMOOTH)
         ));
-        topPanel.add(lblUser, "cell 3 0,alignx right,aligny center");
+        barraTopo.add(lblUser, "cell 3 0,alignx right,aligny center");
 
-        painelFundo.add(topPanel, BorderLayout.NORTH);
+        painelFundo.add(barraTopo, BorderLayout.NORTH);
 
         // Formulário
         JPanel formPanel = new JPanel(new MigLayout("wrap 2", "[right][grow]", "[][][]"));
@@ -87,7 +88,11 @@ public abstract class TelaCadastroClientes extends JFrame {
         JPanel btnPanel = new JPanel(new FlowLayout(FlowLayout.CENTER, 20, 10));
         btnPanel.setOpaque(false);
         JButton btnSalvar = new JButton("Salvar");
+        btnSalvar.setForeground(new Color(255, 255, 255));
+		btnSalvar.setBackground(new Color(32, 60, 115));
         JButton btnCancelar = new JButton("Cancelar");
+        btnCancelar.setBackground(new Color(255, 0, 0));
+		btnCancelar.setForeground(Color.WHITE);
         btnPanel.add(btnSalvar);
         btnPanel.add(btnCancelar);
 
