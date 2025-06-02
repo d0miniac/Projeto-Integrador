@@ -18,7 +18,7 @@ public class ConexaoBD {
         String bancoDados = "armariodigital";
         String url = "jdbc:mysql://" + serverName + "/" + bancoDados;
         String username = "root";
-        String password = "aluno";
+        String password = "admin";
         try {
             connection = DriverManager.getConnection(url, username, password);
         } catch (SQLException e) {

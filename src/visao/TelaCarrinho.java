@@ -9,6 +9,7 @@ import javax.swing.border.EmptyBorder;
 
 import modelo.Carrinho;
 import modelo.ItemVenda;
+import modelo.Funcionario;
 import net.miginfocom.swing.MigLayout;
 
 public class TelaCarrinho extends JFrame {
@@ -16,10 +17,12 @@ public class TelaCarrinho extends JFrame {
     private JPanel contentPane;
     private Carrinho carrinho;
     private ArrayList<ItemVenda> listaItens;
+    private Funcionario funcionario;
 
-    public TelaCarrinho(Carrinho c) {
+    public TelaCarrinho(Carrinho c, Funcionario funcionario) {
         this.carrinho = c;
         this.listaItens = new ArrayList<>(c.getItens());
+        this.funcionario = funcionario;
 
         setTitle("Carrinho de Compras");
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
@@ -33,6 +36,7 @@ public class TelaCarrinho extends JFrame {
 
         criarCabecalho();
         criarPainelItens();
+        criarRodape(); // Novo rodapé com botão Finalizar Compra
     }
 
     private void criarCabecalho() {
@@ -91,5 +95,20 @@ public class TelaCarrinho extends JFrame {
         }
 
         contentPane.add(painelCentro, BorderLayout.CENTER);
+    }
+
+    private void criarRodape() {
+        JPanel painelRodape = new JPanel(new FlowLayout(FlowLayout.RIGHT));
+        painelRodape.setBackground(new Color(240, 240, 240));
+
+        JButton btnFinalizar = new JButton("Finalizar Compra");
+        btnFinalizar.setPreferredSize(new Dimension(150, 30));
+        btnFinalizar.addActionListener(e -> {
+            new TelaPagamento(funcionario).setVisible(true);
+            dispose();
+        });
+
+        painelRodape.add(btnFinalizar);
+        contentPane.add(painelRodape, BorderLayout.SOUTH);
     }
 }

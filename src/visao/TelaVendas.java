@@ -37,8 +37,7 @@ public class TelaVendas extends JFrame {
         setLocationRelativeTo(null);
         setResizable(false);
 
-        contentPane_1 = new JPanel();
-        contentPane_1.setLayout(new BorderLayout());
+        contentPane_1 = new JPanel(new BorderLayout());
         setContentPane(contentPane_1);
 
         criarPainelSuperior();
@@ -46,19 +45,14 @@ public class TelaVendas extends JFrame {
     }
 
     private void criarPainelSuperior() {
-        panelVazio = new JPanel(new FlowLayout(FlowLayout.LEFT));
-        panelVazio.setPreferredSize(new Dimension(getWidth(), 100));
+        panelVazio = new JPanel(new BorderLayout());
+        panelVazio.setPreferredSize(new Dimension(1215, 100));
+        panelVazio.setBackground(new Color(32, 60, 115));
 
-        JButton btnFinalizar = new JButton("Finalizar Compra");
-        btnFinalizar.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-                new TelaPagamento(funcionario).setVisible(true);
-                dispose(); // Fecha a tela de vendas
-            }
-        });
-        panelVazio.add(btnFinalizar);
+        // Painel esquerdo com seta e título
+        JPanel painelEsquerda = new JPanel(new MigLayout("insets 15, align left", "[]10[]", "[]"));
+        painelEsquerda.setOpaque(false);
 
-        // Botão de voltar
         JLabel lblSeta = new JLabel();
         lblSeta.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
         ImageIcon seta = new ImageIcon("src/img/de-volta.png");
@@ -71,7 +65,17 @@ public class TelaVendas extends JFrame {
             }
         });
 
-        // ComboBox de categorias
+        JLabel lblTitulo = new JLabel("VENDAS");
+        lblTitulo.setFont(new Font("Tahoma", Font.BOLD, 40));
+        lblTitulo.setForeground(Color.WHITE);
+
+        painelEsquerda.add(lblSeta);
+        painelEsquerda.add(lblTitulo);
+
+        // Painel direito com filtros, botões e logo
+        JPanel painelDireita = new JPanel(new MigLayout("insets 10, fillx", "[][]10[]10[]10[]10[]push[]", "[]"));
+        painelDireita.setOpaque(false);
+
         comboCategorias = new JComboBox<>();
         comboCategorias.addItem("Todas categorias");
         for (Categoria categoria : Categoria.values()) {
@@ -79,45 +83,51 @@ public class TelaVendas extends JFrame {
         }
 
         JButton btnFiltrar = new JButton("Filtrar");
-        btnFiltrar.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-                aplicarFiltro();
-            }
-        });
+        btnFiltrar.setPreferredSize(new Dimension(120, 30));
+        btnFiltrar.addActionListener(e -> aplicarFiltro());
 
-        // Botão de ver carrinho
-        JButton btnVerCarrinho = new JButton("Ver Carrinho");
-        btnVerCarrinho.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-                new TelaCarrinho(Carrinho.getInstancia()).setVisible(true);
-            }
-        });
+        // Logo no canto direito
+        ImageIcon logoIcon = new ImageIcon("src/img/logo.png");
+        Image logoImage = logoIcon.getImage().getScaledInstance(80, 80, Image.SCALE_SMOOTH);
+        JLabel lblLogo = new JLabel(new ImageIcon(logoImage));
+        
+                JLabel label = new JLabel("Categoria:");
+                label.setFont(new Font("Tahoma", Font.BOLD, 15));
+                label.setForeground(Color.WHITE);
+                
+                        painelDireita.add(label, "cell 0 0");
+        painelDireita.add(comboCategorias, "cell 2 0");
+        painelDireita.add(btnFiltrar, "cell 3 0");
+        
+                JButton btnVerCarrinho = new JButton("Ver Carrinho");
+                btnVerCarrinho.setPreferredSize(new Dimension(120, 30));
+                btnVerCarrinho.addActionListener(e -> new TelaCarrinho(Carrinho.getInstancia(), funcionario).setVisible(true));
+                painelDireita.add(btnVerCarrinho, "cell 4 0");
+        painelDireita.add(lblLogo, "cell 6 0"); // no canto direito
 
-        panelVazio.add(lblSeta);
-        panelVazio.add(new JLabel("Categoria:"));
-        panelVazio.add(comboCategorias);
-        panelVazio.add(btnFiltrar);
-        panelVazio.add(btnVerCarrinho); // <- Aqui o botão é adicionado
+        // Adiciona os painéis ao painel superior
+        panelVazio.add(painelEsquerda, BorderLayout.WEST);
+        panelVazio.add(painelDireita, BorderLayout.EAST);
 
         contentPane_1.add(panelVazio, BorderLayout.NORTH);
     }
 
     private void criarPainelProdutos(List<Produto> produtos) {
         JPanel panelProdutosComScroll = new JPanel(new BorderLayout());
-        panelProdutosComScroll.setPreferredSize(new Dimension(getWidth(), getHeight() - 100));
+        panelProdutosComScroll.setPreferredSize(new Dimension(1215, 750));
 
         JScrollPane scrollPane = new JScrollPane();
         scrollPane.setBorder(new LineBorder(Color.GRAY, 1));
         scrollPane.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
+        scrollPane.getVerticalScrollBar().setUnitIncrement(16);
         panelProdutosComScroll.add(scrollPane, BorderLayout.CENTER);
 
         panelProdutos = new JPanel();
         panelProdutos.setBackground(Color.WHITE);
-        panelProdutos.setLayout(new MigLayout("wrap 3", "[grow]", "[]"));
+        panelProdutos.setLayout(new MigLayout("wrap 3", "[grow,fill]", "[]"));
         scrollPane.setViewportView(panelProdutos);
 
         contentPane_1.add(panelProdutosComScroll, BorderLayout.CENTER);
-
         exibirProdutos(produtos);
     }
 
@@ -154,11 +164,12 @@ public class TelaVendas extends JFrame {
 
         List<Produto> filtrados;
 
-        if (categoriaSelecionada.equals("Todas categorias")) {
-            filtrados = listaProdutos; // Mostra todos os produtos
+        if ("Todas categorias".equals(categoriaSelecionada)) {
+            filtrados = listaProdutos;
         } else {
             filtrados = listaProdutos.stream()
-                .filter(p -> p.getCategoria() != null && p.getCategoria().getDescricao().equalsIgnoreCase(categoriaSelecionada))
+                .filter(p -> p.getCategoria() != null &&
+                             p.getCategoria().getDescricao().equalsIgnoreCase(categoriaSelecionada))
                 .collect(Collectors.toList());
         }
 
