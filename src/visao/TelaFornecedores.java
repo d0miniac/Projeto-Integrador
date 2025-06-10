@@ -75,8 +75,8 @@ public class TelaFornecedores extends JFrame {
         txtFiltro.setColumns(90);
         txtFiltro.setPreferredSize(new Dimension(450, 45));
 
-        JButton btnAdd = new JButton("Adicionar");
-        btnAdd.addActionListener(new ActionListener() {
+        JButton btnCadastrar = new JButton("Cadastrar");
+        btnCadastrar.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
                 dispose();
                 TelaCadastroFornecedores tela = new TelaCadastroFornecedores(prod,TelaFornecedores.this,func, mensagem);
@@ -104,12 +104,12 @@ public class TelaFornecedores extends JFrame {
 			}
 		});
 
-        btnAdd.setBackground(new Color(243, 244, 240));
-        btnAdd.setFont(new Font("Tahoma", Font.PLAIN, 24));
-        btnAdd.setMinimumSize(new Dimension(150, 30));
-        btnAdd.setMaximumSize(new Dimension(150, 30));
-        btnAdd.setBorder(new LineBorder(new Color(123, 150, 212), 2, true));
-        panelComponentes.add(btnAdd, "flowx,cell 4 1,alignx left,growy");
+        btnCadastrar.setBackground(new Color(243, 244, 240));
+        btnCadastrar.setFont(new Font("Tahoma", Font.PLAIN, 24));
+        btnCadastrar.setMinimumSize(new Dimension(150, 30));
+        btnCadastrar.setMaximumSize(new Dimension(150, 30));
+        btnCadastrar.setBorder(new LineBorder(new Color(123, 150, 212), 2, true));
+        panelComponentes.add(btnCadastrar, "flowx,cell 4 1,alignx left,growy");
         
         
         btnUpdate.setBackground(new Color(243, 244, 240));

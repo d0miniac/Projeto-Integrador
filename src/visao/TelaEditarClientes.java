@@ -6,6 +6,9 @@ import modelo.Funcionario;
 import modelo.Produto;
 
 import javax.swing.*;
+import javax.swing.border.MatteBorder;
+import javax.swing.text.MaskFormatter;
+
 import java.awt.*;
 import java.awt.event.*;
 import java.sql.SQLException;
@@ -39,7 +42,7 @@ public abstract class TelaEditarClientes extends JFrame {
         painelFundo.setLayout(new BorderLayout());
         setContentPane(painelFundo);
 
-        // Topo
+        // Topo (Barra Azul)
         ImageIcon imgBarra = new ImageIcon(getClass().getResource("/img/barraParteDeCima.png"));
         JLabel barraTopo = new JLabel(imgBarra);
         barraTopo.setLayout(new MigLayout("", "10[]10[grow]10[]10", "10[80]10"));
@@ -47,7 +50,7 @@ public abstract class TelaEditarClientes extends JFrame {
 
         JLabel lblVoltar = new JLabel(new ImageIcon(
             new ImageIcon(getClass().getResource("/img/de-volta.png"))
-                  .getImage().getScaledInstance(70, 70, Image.SCALE_SMOOTH)
+                    .getImage().getScaledInstance(70, 70, Image.SCALE_SMOOTH)
         ));
         lblVoltar.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
         lblVoltar.addMouseListener(new MouseAdapter() {
@@ -58,45 +61,89 @@ public abstract class TelaEditarClientes extends JFrame {
         barraTopo.add(lblVoltar, "cell 0 0,alignx left,aligny center");
 
         JLabel lblTitulo = new JLabel("Editar Cliente");
-        lblTitulo.setFont(new Font("Arial", Font.BOLD, 36));
+        lblTitulo.setFont(new Font("Arial", Font.BOLD, 30));
         lblTitulo.setForeground(Color.WHITE);
         barraTopo.add(lblTitulo, "growx, alignx center");
 
-        
-        //Icone à direita
         JLabel lblUser = new JLabel(new ImageIcon(
             new ImageIcon(getClass().getResource("/img/armariodigital.png"))
-                  .getImage().getScaledInstance(150, 80, Image.SCALE_SMOOTH)
+                    .getImage().getScaledInstance(150, 80, Image.SCALE_SMOOTH)
         ));
         barraTopo.add(lblUser, "cell 3 0,alignx right,aligny center");
 
         painelFundo.add(barraTopo, BorderLayout.NORTH);
 
-        // Formulário
-        JPanel formPanel = new JPanel(new MigLayout("wrap 2", "[right][grow]", "[][][]"));
-        formPanel.setOpaque(false);
-        formPanel.add(new JLabel("Nome:"));
-        txtNome = new JTextField(cliente.getNome_Clientes());
-        formPanel.add(txtNome, "growx");
-        formPanel.add(new JLabel("Email:"));
-        txtEmail = new JTextField(cliente.getEmail());
-        formPanel.add(txtEmail, "growx");
-        formPanel.add(new JLabel("Telefone:"));
-        txtTelefone = new JTextField(cliente.getTelefone());
-        formPanel.add(txtTelefone, "growx");
+        // Painel Central
+        JPanel contentPane = new JPanel();
+        contentPane.setOpaque(false);
+        contentPane.setLayout(new MigLayout("", "[grow]", "[grow][100px][150px][150px][100px]"));
+        painelFundo.add(contentPane, BorderLayout.CENTER);
+
+        // Título "Informações do cliente"
+        JLabel lblInfo = new JLabel("Informações do cliente");
+        lblInfo.setFont(new Font("Arial", Font.BOLD, 16));
+        lblInfo.setForeground(new Color(153, 162, 209));
+        contentPane.add(lblInfo, "cell 0 0,alignx center");
+
+        // Campos
+
+        JPanel painelTopo = new JPanel();
+        painelTopo.setOpaque(false);
+        painelTopo.setBorder(new MatteBorder(0, 0, 5, 0, new Color(32, 60, 115, 124)));
+        painelTopo.setLayout(new MigLayout("", "[grow][grow][grow]", "[][]"));
+        contentPane.add(painelTopo, "cell 0 1,grow");
+
+
+        JLabel lblNome = new JLabel("NOME");
+        painelTopo.add(lblNome, "cell 0 0,alignx center");
+
+        txtNome = new JTextField();
+        txtNome.setColumns(10);
+        painelTopo.add(txtNome, "cell 0 1,alignx center");
+
+        JLabel lblEmail = new JLabel("EMAIL");
+        painelTopo.add(lblEmail, "cell 1 0,alignx center");
+
+        txtEmail = new JTextField();
+        txtEmail.setColumns(10);
+        painelTopo.add(txtEmail, "cell 1 1,alignx center");
+
+        JLabel lblTelefone = new JLabel("TELEFONE");
+        painelTopo.add(lblTelefone, "cell 2 0,alignx center");
+        
+        try {
+            MaskFormatter formatTelefone = new MaskFormatter("(##) #####-####");
+            txtTelefone = new JFormattedTextField(formatTelefone);
+            txtTelefone.setColumns(10);
+            painelTopo.add(txtTelefone, "cell 2 1,alignx center");
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        // Linha separadora
+        JSeparator separator = new JSeparator();
+        contentPane.add(separator, BorderLayout.SOUTH);
+
+        painelFundo.add(contentPane, BorderLayout.CENTER);
 
         // Botões
-        JPanel btnPanel = new JPanel(new FlowLayout(FlowLayout.CENTER, 20, 10));
-        btnPanel.setOpaque(false);
-        JButton btnSalvar = new JButton("Salvar");
-        btnSalvar.setForeground(new Color(255, 255, 255));
-		btnSalvar.setBackground(new Color(32, 60, 115));
-        JButton btnCancelar = new JButton("Cancelar");
-        btnCancelar.setBackground(new Color(255, 0, 0));
-		btnCancelar.setForeground(Color.WHITE);
-        btnPanel.add(btnSalvar);
-        btnPanel.add(btnCancelar);
+        JPanel botoesPanel = new JPanel(new FlowLayout(FlowLayout.LEFT, 20, 10));
+        botoesPanel.setOpaque(false);
 
+        JButton btnSalvar = new JButton("SALVAR");
+        btnSalvar.setBackground(new Color(32, 60, 115));
+        btnSalvar.setForeground(Color.WHITE);
+
+        JButton btnCancelar = new JButton("CANCELAR");
+        btnCancelar.setBackground(new Color(255, 0, 0));
+        btnCancelar.setForeground(Color.WHITE);
+
+        botoesPanel.add(btnSalvar);
+        botoesPanel.add(btnCancelar);
+
+        painelFundo.add(botoesPanel, BorderLayout.SOUTH);
+
+        // Ações dos botões
         btnSalvar.addActionListener(e -> {
             String nome = txtNome.getText().trim();
             String email = txtEmail.getText().trim();
@@ -112,7 +159,7 @@ public abstract class TelaEditarClientes extends JFrame {
                 dao.atualizar(cliente);
             } catch (SQLException ex) {
                 JOptionPane.showMessageDialog(this, "Erro ao atualizar: " + ex.getMessage(),
-                                              "Erro", JOptionPane.ERROR_MESSAGE);
+                        "Erro", JOptionPane.ERROR_MESSAGE);
                 return;
             }
             dispose();
@@ -122,15 +169,7 @@ public abstract class TelaEditarClientes extends JFrame {
         btnCancelar.addActionListener(e -> {
             dispose();
         });
-
-        JPanel center = new JPanel(new BorderLayout());
-        center.setOpaque(false);
-        center.add(formPanel, BorderLayout.CENTER);
-        center.add(btnPanel, BorderLayout.SOUTH);
-
-        painelFundo.add(center, BorderLayout.CENTER);
     }
 
-    /** Será chamado após atualizar para recarregar a lista na TelaClientes */
     protected abstract void onClienteSalvo();
 }
