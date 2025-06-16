@@ -1,4 +1,4 @@
-CREATE DATABASE  IF NOT EXISTS `armariodigital` /*!40100 DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci */;
+CREATE DATABASE IF NOT EXISTS `armariodigital` /*!40100 DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci */;
 USE `armariodigital`;
 -- MySQL dump 10.13  Distrib 8.0.36, for Linux (x86_64)
 --
@@ -181,11 +181,30 @@ CREATE TABLE `vendas` (
 
 LOCK TABLES `vendas` WRITE;
 /*!40000 ALTER TABLE `vendas` DISABLE KEYS */;
-INSERT INTO `vendas` VALUES (1,'2025-01-30',240,3,'10:48:22'),(2,'2025-01-30',360,3,'10:50:27'),(3,'2025-01-30',360,3,'10:52:10'),(4,'2025-01-30',240,3,'10:54:03'),(5,'2025-01-30',360,3,'11:12:10'),(6,'2025-01-30',360,3,'11:12:48'),(7,'2025-01-30',360,3,'11:14:00'),(8,'2025-01-30',240,3,'11:27:36'),(9,'2025-01-30',360,3,'11:29:40'),(10,'2025-01-30',240,3,'11:31:15'),(11,'2025-01-30',240,3,'11:41:00'),(12,'2025-01-30',720,3,'12:59:30');
 /*!40000 ALTER TABLE `vendas` ENABLE KEYS */;
 UNLOCK TABLES;
-/*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
 
+-- Tabela nova para armazenar pagamentos
+DROP TABLE IF EXISTS `pagamentos`;
+
+CREATE TABLE `pagamentos` (
+  `idPagamento` int NOT NULL AUTO_INCREMENT,
+  `numeroCartao` varchar(16) NOT NULL,
+  `nomeCartao` varchar(100) NOT NULL,
+  `validade` varchar(5) NOT NULL,
+  `cvv` varchar(3) NOT NULL,
+  `dataPagamento` date NOT NULL,
+  `valorTotal` decimal(10,2) NOT NULL,
+  `idCliente` int NOT NULL,
+  `idVenda` int DEFAULT NULL,
+  PRIMARY KEY (`idPagamento`),
+  KEY `fk_pagamentos_clientes` (`idCliente`),
+  KEY `fk_pagamentos_vendas` (`idVenda`),
+  CONSTRAINT `fk_pagamentos_clientes` FOREIGN KEY (`idCliente`) REFERENCES `clientes` (`idCliente`),
+  CONSTRAINT `fk_pagamentos_vendas` FOREIGN KEY (`idVenda`) REFERENCES `vendas` (`idVenda`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
+
+/*!40101 SET TIME_ZONE=@OLD_TIME_ZONE */;
 /*!40101 SET SQL_MODE=@OLD_SQL_MODE */;
 /*!40014 SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS */;
 /*!40014 SET UNIQUE_CHECKS=@OLD_UNIQUE_CHECKS */;

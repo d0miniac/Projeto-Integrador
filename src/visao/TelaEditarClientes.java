@@ -119,6 +119,13 @@ public abstract class TelaEditarClientes extends JFrame {
         } catch (Exception e) {
             e.printStackTrace();
         }
+        
+        if(cliente !=null) {
+        	txtNome.setText(cliente.getNome_Clientes());
+        	txtEmail.setText(cliente.getEmail());
+        	txtTelefone.setText(cliente.getTelefone());
+
+        }
 
         // Linha separadora
         JSeparator separator = new JSeparator();
