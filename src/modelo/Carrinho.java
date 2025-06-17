@@ -39,4 +39,9 @@ public class Carrinho {
                 .mapToDouble(i -> i.getFoto().getPreco() * i.getQuantidade())
                 .sum();
     }
+
+	public List<Produto> getProdutos() {
+		
+		return getProdutos();
+	}
 }
