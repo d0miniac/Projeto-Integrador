@@ -2,6 +2,7 @@ package visao;
 
 import java.awt.*;
 import java.awt.event.*;
+import java.sql.SQLException;
 import java.util.ArrayList;
 
 import javax.swing.*;
@@ -118,7 +119,12 @@ public class TelaCarrinho extends JFrame {
 		JButton btnFinalizar = new JButton("Finalizar Compra");
 		btnFinalizar.setPreferredSize(new Dimension(150, 30));
 		btnFinalizar.addActionListener(e -> {
-			new TelaPagamento(funcionario).setVisible(true);
+			try {
+				new TelaPagamento(carrinho, funcionario).setVisible(true);
+			} catch (SQLException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			}
 			dispose();
 		});
 

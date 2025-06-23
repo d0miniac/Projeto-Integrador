@@ -1,5 +1,6 @@
 package modelo;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -34,14 +35,25 @@ public class Carrinho {
         itens.clear();
     }
 
-    public double getTotal() {
-        return itens.stream()
-                .mapToDouble(i -> i.getFoto().getPreco() * i.getQuantidade())
-                .sum();
+    // Método corrigido para usar BigDecimal
+    public BigDecimal getTotal() {
+        BigDecimal total = BigDecimal.ZERO;
+        for (ItemVenda item : itens) {
+            Produto produto = item.getFoto(); // ou item.getProduto()
+            if (produto != null && produto.getPreco() != null) {
+                BigDecimal preco = produto.getPreco()
+                        .multiply(BigDecimal.valueOf(item.getQuantidade()));
+                total = total.add(preco);
+            }
+        }
+        return total;
     }
 
-	public List<Produto> getProdutos() {
-		
-		return getProdutos();
-	}
+    public List<Produto> getProdutos() {
+        List<Produto> produtos = new ArrayList<>();
+        for (ItemVenda item : itens) {
+            produtos.add(item.getFoto()); // ou item.getProduto()
+        }
+        return produtos;
+    }
 }

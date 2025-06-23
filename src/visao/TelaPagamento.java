@@ -16,6 +16,7 @@ import controle.PagamentoDAO;
 import modelo.Carrinho;
 import modelo.Clientes;
 import modelo.Funcionario;
+import modelo.ItemVenda;
 import modelo.Pagamento;
 import modelo.Produto;
 import net.miginfocom.swing.MigLayout;
@@ -27,9 +28,11 @@ public class TelaPagamento extends JFrame {
     private JLabel lblDataPagamento, lblTotal;
     private JButton btnPagar;
     private Funcionario funcionario;
+    private Carrinho carrinho;
 
-    public TelaPagamento(Funcionario funcionario) throws SQLException {
+    public TelaPagamento(Carrinho carrinho, Funcionario funcionario) throws SQLException {
         this.funcionario = funcionario;
+        this.carrinho = carrinho;
         setTitle("Pagamento");
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         setSize(600, 400);
@@ -64,7 +67,7 @@ public class TelaPagamento extends JFrame {
         panelCentro.add(lblDataPagamento, "cell 1 5, growx");
 
         panelCentro.add(new JLabel("Total:"), "cell 0 6");
-        lblTotal = new JLabel("R$ " + calcularTotal(Carrinho.getInstancia()).toString().replace(".", ","));
+        lblTotal = new JLabel("R$ " + calcularTotal(carrinho).toString().replace(".", ","));
         panelCentro.add(lblTotal, "cell 1 6, growx");
 
         btnPagar = new JButton("Pagar");
@@ -115,7 +118,7 @@ public class TelaPagamento extends JFrame {
                     pagamento.setNomeCartao(txtNome.getText().trim());
                     pagamento.setValidade(txtValidade.getText().trim());
                     pagamento.setCvv(txtCVV.getText().trim());
-                    pagamento.setValorTotal(calcularTotal(Carrinho.getInstancia()));
+                    pagamento.setValorTotal(calcularTotal(carrinho));
                     pagamento.setDataPagamento(LocalDate.now());
 
                     PagamentoDAO pagamentoDAO = new PagamentoDAO();
@@ -157,12 +160,15 @@ public class TelaPagamento extends JFrame {
         return true;
     }
 
-    private BigDecimal calcularTotal(Carrinho carrinho) {
-        BigDecimal total = BigDecimal.ZERO;
-        for (Produto p : carrinho.getProdutos()) {
-            BigDecimal preco = p.getPreco().multiply(BigDecimal.valueOf(p.getQuantidade()));
-            total = total.add(preco);
-        }
-        return total;
+    private BigDecimal calcularTotal(Carrinho carrinho2) {
+    	BigDecimal total = BigDecimal.ZERO;
+    	for (ItemVenda item : Carrinho.getInstancia().getItens()) {
+    	Produto produto = item.getFoto(); 
+    	if (produto != null && produto.getPreco() != null) {
+    	BigDecimal preco = produto.getPreco().multiply(BigDecimal.valueOf(item.getQuantidade()));
+    	total = total.add(preco);
     }
+    }
+    	return total;
+    	}
 }

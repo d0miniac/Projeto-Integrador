@@ -25,7 +25,7 @@ public class ProdutoDAO {
 		//	stmt1.setString(1, p.getNome());
 			stmt1.setString(1, p.getTamanho().getDescricao());
 			stmt1.setString(2, p.getCategoria().getDescricao());
-			stmt1.setFloat(3, p.getPreco());
+			stmt1.setBigDecimal(3, p.getPreco());
 			stmt1.setInt(4, p.getQuantidade());
 			stmt1.setString(5, p.getCor().getDescricao());
 			stmt1.setString(6, p.getMarca().getDescricao());
@@ -60,7 +60,7 @@ public class ProdutoDAO {
 	            p.setCategoria(Categoria.getCategoriaPorDescricao(rs.getString("Categoria").toUpperCase()));
 	            p.setCor(Cor.getCorPorDescricao(rs.getString("Cor")));
 	            p.setTamanho(Tamanho.getTamanhoPorDescricao(rs.getString("Tamanho")));
-	            p.setPreco(rs.getFloat("Preco"));
+	            p.setPreco(rs.getBigDecimal("Preco"));
 	            p.setQuantidade(rs.getInt("QT_Estoque"));
 	            p.setMarca(Marca.getMarcaPorDescricao(rs.getString("Marca")));
 	            p.setFornecedor(rs.getLong("Fornecedor_idFornecedor"));
@@ -116,7 +116,7 @@ public class ProdutoDAO {
 
 			stmt1.setString(2, p.getCategoria().getDescricao());
 
-			stmt1.setFloat(3, p.getPreco());
+			stmt1.setBigDecimal(3, p.getPreco());
 
 			stmt1.setInt(4, p.getQuantidade());
 
@@ -159,7 +159,7 @@ public class ProdutoDAO {
 				p.setCategoria(Categoria.getCategoriaPorDescricao(rs.getString("Categoria")));
 				p.setCor(Cor.getCorPorDescricao(rs.getString("Cor")));
 				p.setTamanho(Tamanho.getTamanhoPorDescricao(rs.getString("Tamanho")));
-				p.setPreco(rs.getFloat("Preco"));
+				p.setPreco(rs.getBigDecimal("Preco"));
 				p.setQuantidade(rs.getInt("QT_Estoque"));
 				p.setMarca(Marca.getMarcaPorDescricao(rs.getString("Marca")));
 				p.setFornecedor(rs.getLong("Fornecedor_idFornecedor"));

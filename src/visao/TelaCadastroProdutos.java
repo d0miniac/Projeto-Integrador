@@ -51,6 +51,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.io.OutputStreamWriter;
+import java.math.BigDecimal;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -333,7 +334,7 @@ public class TelaCadastroProdutos extends JFrame {
 					Fornecedor fnc = (Fornecedor) cbxFornecedor.getSelectedItem();
 					produto.setFornecedor(fnc.getIdFornecedor());
 
-					Float preco = Float.parseFloat(txtPreco.getText().replace("R$", "").replace(",", ".").trim());
+					BigDecimal preco = new BigDecimal(txtPreco.getText().replace("R$", "").replace(",", ".").trim());
 
 					int quantidade;
 					try {

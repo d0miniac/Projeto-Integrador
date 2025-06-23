@@ -25,7 +25,7 @@ public class ItemVenda {
     }
 
 	public String getNome() {
-		// TODO Auto-generated method stub
+
 		return null;
 	}
 }

@@ -22,6 +22,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.math.BigDecimal;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.sql.SQLException;
@@ -257,7 +258,7 @@ public class TelaEditarProdutos extends JFrame {
                     try {
                         Fornecedor fornecedor = (Fornecedor) cbxFornecedor.getSelectedItem();
                         prod.setFornecedor(fornecedor.getIdFornecedor());
-                        prod.setPreco(Float.parseFloat(txtPreco.getText().replace(",", ".")));
+                        prod.setPreco(new BigDecimal(txtPreco.getText().replace(",", ".")));
                         prod.setQuantidade(Integer.parseInt(txtQuantidade.getText()));
                         prod.setCor((Cor) cbxCor.getSelectedItem());
                         prod.setMarca((Marca) cbxMarca.getSelectedItem());
