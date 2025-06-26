@@ -30,7 +30,9 @@ public class TelaEditarFuncionario extends JFrame {
 		setVisible(true);
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
-		contentPane = new ImagePanel("src/img/bgEditarFuncionarios.png");
+		//contentPane = new ImagePanel("src/img/bgEditarFuncionarios.png");
+		contentPane = new ImagePanel(getClass().getResource("/img/bgEditarFuncionarios.png"));
+
 		setContentPane(contentPane);
 		contentPane.setLayout(new MigLayout("", "[grow]", "[70px][][grow][][100px][150px][150px][100px]"));
 		JPanel vazio = new JPanel();

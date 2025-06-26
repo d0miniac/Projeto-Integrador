@@ -70,7 +70,8 @@ public class TelaHistoricoVendas extends JFrame {
 
 
      
-        contentPane = new ImagePanel("src/img/bgTelaHistorico.png");
+    //    contentPane = new ImagePanel("src/img/bgTelaHistorico.png");
+    	contentPane  = new ImagePanel(getClass().getResource("/img/bgTelaHistorico.png"));
         contentPane.setBackground(new Color(243, 244, 240));
         contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
         setContentPane(contentPane);

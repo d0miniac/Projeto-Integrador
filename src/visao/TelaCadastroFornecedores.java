@@ -62,7 +62,9 @@ public class TelaCadastroFornecedores extends JFrame {
         this.telaFornecedores = telaFornecedores;
         setResizable(false);
         setTitle("Cadastro de Fornecedores");
-        contentPane = new ImagePanel("src/img/bgCadastroFornecedores.png");
+        //contentPane = new ImagePanel("src/img/bgCadastroFornecedores.png");
+        contentPane = new ImagePanel(getClass().getResource("/img/bgCadastroFornecedores.png"));
+
         setContentPane(contentPane);
         contentPane.setLayout(new MigLayout("", "[grow]", "[70px][][grow][][100px][150px][150px][100px]"));
 

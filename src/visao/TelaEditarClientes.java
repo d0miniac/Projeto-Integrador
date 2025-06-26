@@ -38,7 +38,9 @@ public abstract class TelaEditarClientes extends JFrame {
         setResizable(false);
 
         // Fundo
-        ImagePanel painelFundo = new ImagePanel("/img/Fundo.png");
+       // ImagePanel painelFundo = new ImagePanel("/img/Fundo.png");
+        ImagePanel painelFundo = new ImagePanel(getClass().getResource("/img/Fundo.png"));
+
         painelFundo.setLayout(new BorderLayout());
         setContentPane(painelFundo);
 

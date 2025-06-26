@@ -42,8 +42,11 @@ public class TelaLogin extends JFrame {
         contentPane.setLayout(new GridLayout(1, 2));
         setContentPane(contentPane);
 
-        ImagePanel panelDireito = new ImagePanel("src/img/background1D.png");
-        ImagePanel panelEsquerdo = new ImagePanel("src/img/background1E.png");
+       // ImagePanel panelDireito = new ImagePanel("src/img/background1D.png");
+        //ImagePanel panelEsquerdo = new ImagePanel("src/img/background1E.png");
+       ImagePanel panelDireito = new ImagePanel(getClass().getResource("/img/background1D.png"));
+       ImagePanel panelEsquerdo = new ImagePanel(getClass().getResource("/img/background1E.png"));
+
 
         contentPane.add(panelEsquerdo);
         contentPane.add(panelDireito);

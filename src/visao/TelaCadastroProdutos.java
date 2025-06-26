@@ -97,7 +97,9 @@ public class TelaCadastroProdutos extends JFrame {
 	public TelaCadastroProdutos(Produto prod, Funcionario func, String mensagem) throws SQLException {
 		produto = new Produto();
 		setTitle("Cadastro de Produtos");
-		contentPane = new ImagePanel("src/img/bgCadastroProdutos.png");
+		//contentPane = new ImagePanel("src/img/bgCadastroProdutos.png");
+		contentPane = new ImagePanel(getClass().getResource("/img/bgCadastroProdutos.png"));
+
 		setContentPane(contentPane);
 		contentPane.setLayout(new MigLayout("", "[grow]", "[70px][100px][100px][200px]"));
 

@@ -54,7 +54,9 @@ public class TelaEditarProdutos extends JFrame {
     public TelaEditarProdutos(Produto prod, Funcionario func) throws SQLException {
 
         setTitle("Alteração de Produtos");
-        contentPane = new ImagePanel("src/img/bgEditarProduto.png");
+       // contentPane = new ImagePanel("src/img/bgEditarProduto.png");
+       	contentPane = new ImagePanel(getClass().getResource("/img/bgEditarProduto.png"));
+
         setContentPane(contentPane);
         contentPane.setLayout(new MigLayout("", "[grow]", "[70px][100px][100px][200px]"));
 

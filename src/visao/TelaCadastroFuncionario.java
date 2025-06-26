@@ -70,7 +70,9 @@ public class TelaCadastroFuncionario extends JFrame {
 		setTitle("Cadastro de Funcionários");
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
-		contentPane = new ImagePanel("src/img/background3.png");
+		//contentPane = new ImagePanel("src/img/background3.png");
+		contentPane = new ImagePanel(getClass().getResource("/img/background3.png"));
+
 		setContentPane(contentPane);
 
 		setSize(1215, 850);

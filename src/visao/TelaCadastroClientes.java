@@ -36,7 +36,9 @@ public abstract class TelaCadastroClientes extends JFrame {
         setLocationRelativeTo(null);
         setResizable(false);
 
-        ImagePanel painelFundo = new ImagePanel("/img/Fundo.png");
+       // ImagePanel painelFundo = new ImagePanel("/img/Fundo.png");
+		ImagePanel painelFundo  = new ImagePanel(getClass().getResource("/img/Fundo.png"));
+
         painelFundo.setLayout(new BorderLayout());
         setContentPane(painelFundo);
 

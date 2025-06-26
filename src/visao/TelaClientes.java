@@ -55,7 +55,9 @@ public class TelaClientes extends JFrame {
 
     private void initComponents() {
         // --- Fundo ---
-        ImagePanel contentPane = new ImagePanel("/img/Fundo.png");
+        //ImagePanel contentPane = new ImagePanel("/img/Fundo.png");
+        ImagePanel contentPane = new ImagePanel(getClass().getResource("/img/Fundo.png"));
+
         contentPane.setLayout(new BorderLayout());
         setContentPane(contentPane);
 

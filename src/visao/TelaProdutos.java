@@ -67,7 +67,9 @@ public class TelaProdutos extends JFrame {
 		setTitle("Produtos");
 
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		contentPane = new ImagePanel("src/img/bgProdutos.png");
+		//contentPane = new ImagePanel("src/img/bgProdutos.png");
+		contentPane = new ImagePanel(getClass().getResource("/img/bgProdutos.png"));
+
 		contentPane.setBackground(new Color(243, 244, 240));
 		setContentPane(contentPane);
 		setSize(1215, 850);
@@ -153,25 +155,26 @@ public class TelaProdutos extends JFrame {
 
 		JButton btnUpdate = new JButton("Alterar");
 		btnUpdate.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				try {
-					int i = tableProdutos.getSelectedRow();
-					if (i != -1) {
-						Produto produto = listaProdutos.get(i);
-						TelaEditarProdutos telaEditar = new TelaEditarProdutos(prod, func);
-						dispose();
-						telaEditar.setVisible(true);
-						telaEditar.setSize(657, 425);
-						telaEditar.setLocationRelativeTo(null);
-					} else {
-						new TelaErro("Selecione um produto para alterar.", 0).setVisible(true);
-					}
-				} catch (Exception ex) {
-					ex.printStackTrace();
-					new TelaErro("Erro ao abrir a tela de edição do produto!", 0).setVisible(true);
-				}
-			}
-		});
+    		public void actionPerformed(ActionEvent e) {
+        		try {
+            		int i = tableProdutos.getSelectedRow();
+           			 if (i != -1) {
+              			 Produto produto = listaProdutos.get(i); // <- produto selecionado corretamente
+                		 TelaEditarProdutos telaEditar = new TelaEditarProdutos(produto, func); // <- passa o produto correto
+                		 dispose();
+                    	 telaEditar.setVisible(true);
+                		 telaEditar.setSize(657, 425);
+                		 telaEditar.setLocationRelativeTo(null);
+             		} else {
+                		new TelaErro("Selecione um produto para alterar.", 0).setVisible(true);
+           		    }
+       			 } catch (Exception ex) {
+           			 ex.printStackTrace();
+            		 new TelaErro("Erro ao abrir a tela de edição do produto!", 0).setVisible(true);
+        }
+    }
+});
+
 
 		btnUpdate.setBackground(new Color(243, 244, 240));
 		btnUpdate.setFont(new Font("Tahoma", Font.PLAIN, 24));

@@ -52,7 +52,9 @@ public class TelaFornecedores extends JFrame {
 		setLocationRelativeTo(null);
 		setResizable(false);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        contentPane = new ImagePanel("src/img/bgTelaFornecedores.png");
+        //contentPane = new ImagePanel("src/img/bgTelaFornecedores.png");
+        contentPane = new ImagePanel(getClass().getResource("/img/bgTelaFornecedores.png"));
+
         contentPane.setBackground(new Color(243, 244, 240));
         setContentPane(contentPane);
         contentPane.setLayout(new MigLayout("", "[grow,fill]", "[120px][grow]"));
