@@ -47,6 +47,11 @@ public class Clientes implements Serializable{
 	public void setTelefone(String telefone) {
 		this.telefone = telefone;
 	}
+	@Override
+	public String toString() {
+    return this.getNome_Clientes(); 
+}
+
 	
 	
 }

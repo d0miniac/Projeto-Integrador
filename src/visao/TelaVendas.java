@@ -54,7 +54,8 @@ public class TelaVendas extends JFrame {
 
 		JLabel lblSeta = new JLabel();
 		lblSeta.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
-		ImageIcon seta = new ImageIcon("src/img/de-volta.png");
+		//ImageIcon seta = new ImageIcon("img/de-volta.png");
+		ImageIcon seta = new ImageIcon(getClass().getResource("/img/de-volta.png"));
 		Image voltar = seta.getImage().getScaledInstance(70, 70, Image.SCALE_SMOOTH);
 		lblSeta.setIcon(new ImageIcon(voltar));
 		lblSeta.addMouseListener(new MouseAdapter() {
@@ -84,8 +85,8 @@ public class TelaVendas extends JFrame {
 		btnFiltrar.setPreferredSize(new Dimension(120, 30));
 		btnFiltrar.addActionListener(e -> aplicarFiltro());
 
-		// Logo no canto direito
-		ImageIcon logoIcon = new ImageIcon("src/img/logo.png");
+		//ImageIcon logoIcon = new ImageIcon("img/logo.png");
+		ImageIcon logoIcon = new ImageIcon(getClass().getResource("/img/logo.png"));
 		Image logoImage = logoIcon.getImage().getScaledInstance(80, 80, Image.SCALE_SMOOTH);
 		JLabel lblLogo = new JLabel(new ImageIcon(logoImage));
 
@@ -129,36 +130,62 @@ public class TelaVendas extends JFrame {
 	}
 
 	private void exibirProdutos(List<Produto> produtos) {
-		panelProdutos.removeAll();
-		for (Produto prod : produtos) {
-			JButton btnProduto = new JButton();
-			btnProduto.setPreferredSize(new Dimension(350, 400));
-			btnProduto.setLayout(new BorderLayout());
-			btnProduto.setBackground(Color.WHITE);
+    panelProdutos.removeAll();
 
-			ImageIcon icon = new ImageIcon(prod.getFoto());
-			Image image = icon.getImage().getScaledInstance(350, 350, Image.SCALE_SMOOTH);
-			JLabel lblImage = new JLabel(new ImageIcon(image));
-			btnProduto.add(lblImage, BorderLayout.CENTER);
+    for (Produto prod : produtos) {
+        JButton btnProduto = new JButton();
+        btnProduto.setPreferredSize(new Dimension(350, 400));
+        btnProduto.setLayout(new BorderLayout());
+        btnProduto.setBackground(Color.WHITE);
 
-			JPanel panelDetalhes = new JPanel();
-			panelDetalhes.setLayout(new BoxLayout(panelDetalhes, BoxLayout.Y_AXIS));
-			panelDetalhes.setBackground(Color.WHITE);
-			panelDetalhes.add(new JLabel("Preço: R$ " + prod.getPreco()));
-			panelDetalhes.add(new JLabel("Categoria: " + prod.getCategoria().getDescricao()));
+        // Exibe o caminho da imagem para depuração
+        System.out.println("Caminho imagem: " + prod.getFoto());
 
-			btnProduto.add(panelDetalhes, BorderLayout.SOUTH);
+        try {
+            Image image;
+            if (prod.getFoto() != null && !prod.getFoto().isEmpty()) {
+                java.net.URL caminho = getClass().getResource("/" + prod.getFoto());
+                if (caminho != null) {
+                    ImageIcon icon = new ImageIcon(caminho);
+                    image = icon.getImage().getScaledInstance(350, 350, Image.SCALE_SMOOTH);
+                } else {
+                    System.out.println("Imagem não encontrada, usando padrão.");
+                    image = new ImageIcon(getClass().getResource("/img/sem-foto.png"))
+                                .getImage().getScaledInstance(350, 350, Image.SCALE_SMOOTH);
+                }
+            } else {
+                image = new ImageIcon(getClass().getResource("/img/sem-foto.png"))
+                            .getImage().getScaledInstance(350, 350, Image.SCALE_SMOOTH);
+            }
 
-			btnProduto.addActionListener(e -> adicionarAoCarrinho(prod));
-			panelProdutos.add(btnProduto);
-		}
-		panelProdutos.revalidate();
-		panelProdutos.repaint();
-	}
+            JLabel lblImage = new JLabel(new ImageIcon(image));
+            btnProduto.add(lblImage, BorderLayout.CENTER);
+
+        } catch (Exception ex) {
+            ex.printStackTrace();
+            JLabel lblErro = new JLabel("Imagem indisponível", SwingConstants.CENTER);
+            lblErro.setPreferredSize(new Dimension(350, 350));
+            btnProduto.add(lblErro, BorderLayout.CENTER);
+        }
+
+        // Detalhes do produto
+        JPanel panelDetalhes = new JPanel();
+        panelDetalhes.setLayout(new BoxLayout(panelDetalhes, BoxLayout.Y_AXIS));
+        panelDetalhes.setBackground(Color.WHITE);
+        panelDetalhes.add(new JLabel("Preço: R$ " + prod.getPreco()));
+        panelDetalhes.add(new JLabel("Categoria: " + prod.getCategoria().getDescricao()));
+        btnProduto.add(panelDetalhes, BorderLayout.SOUTH);
+
+        btnProduto.addActionListener(e -> adicionarAoCarrinho(prod));
+        panelProdutos.add(btnProduto);
+    }
+
+    panelProdutos.revalidate();
+    panelProdutos.repaint();
+}
 
 	private void aplicarFiltro() {
 		String categoriaSelecionada = (String) comboCategorias.getSelectedItem();
-
 		List<Produto> filtrados;
 
 		if ("Todas categorias".equals(categoriaSelecionada)) {
@@ -174,19 +201,20 @@ public class TelaVendas extends JFrame {
 	}
 
 	private void adicionarAoCarrinho(Produto produto) {
-		Carrinho carrinho = Carrinho.getInstancia();
-		ItemVenda itemExistente = carrinho.getItens().stream().filter(item -> item.getIdProduto() == produto.getId())
-				.findFirst().orElse(null);
+    Carrinho carrinho = Carrinho.getInstancia();
+    ItemVenda itemExistente = carrinho.getItens().stream()
+            .filter(item -> item.getIdProduto() == produto.getId()).findFirst().orElse(null);
 
-		if (itemExistente != null) {
-			itemExistente.setQuantidade(itemExistente.getQuantidade() + 1);
-		} else {
-			ItemVenda novoItem = new ItemVenda();
-			novoItem.setFoto(produto);
-			novoItem.setQuantidade(1);
-			carrinho.adicionarItem(novoItem);
-		}
+    if (itemExistente != null) {
+        itemExistente.setQuantidade(itemExistente.getQuantidade() + 1);
+    } else {
+        ItemVenda novoItem = new ItemVenda();
+        novoItem.setFoto(produto);                  // armazena o Produto
+        novoItem.setNome(produto.getNome());        // ← ESSA LINHA corrige o problema!
+        novoItem.setQuantidade(1);
+        carrinho.adicionarItem(novoItem);
+    }
 
-		JOptionPane.showMessageDialog(this, "Produto adicionado ao carrinho!");
-	}
+    JOptionPane.showMessageDialog(this, "Produto adicionado ao carrinho!");
+}
 }

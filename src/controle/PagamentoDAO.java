@@ -14,7 +14,7 @@ public class PagamentoDAO {
 	    }
 	
 	public void salvarPagamento(Pagamento pagamento) throws SQLException{
-        String sql = "INSERT INTO pagamentos (id_Clientes, numero_cartao, nome_cartao, validade, cvv, valor_total, data_pagamento) VALUES (?, ?, ?, ?, ?, ?, ?)";
+        String sql = "INSERT INTO pagamentos (idCliente, numeroCartao, nomeCartao, validade, cvv, valorTotal, dataPagamento) VALUES (?, ?, ?, ?, ?, ?, ?)";
         
         try(Connection con = getConnection();
         		PreparedStatement pstm = con.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)){

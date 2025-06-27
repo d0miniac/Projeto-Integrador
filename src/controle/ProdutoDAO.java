@@ -22,7 +22,7 @@ public class ProdutoDAO {
 			stmt1 = conn.prepareStatement(
 					"insert into armariodigital.produtos(Tamanho, Categoria, Preco, QT_Estoque ,Cor ,Marca ,Fornecedor_idFornecedor , Imagem) values (?, ?,?,?,?,?,?,?);");
 
-		//	stmt1.setString(1, p.getNome());
+			stmt1.setString(1, p.getNome());
 			stmt1.setString(1, p.getTamanho().getDescricao());
 			stmt1.setString(2, p.getCategoria().getDescricao());
 			stmt1.setBigDecimal(3, p.getPreco());
@@ -55,7 +55,7 @@ public class ProdutoDAO {
 	        rs = stmt1.executeQuery();
 	        while (rs.next()) {
 	            Produto p = new Produto();
-	         //   p.setNome(rs.getString("Nome"));
+	         	p.setNome(rs.getString("Nome"));
 	            p.setId(rs.getLong("idProduto"));
 	            p.setCategoria(Categoria.getCategoriaPorDescricao(rs.getString("Categoria").toUpperCase()));
 	            p.setCor(Cor.getCorPorDescricao(rs.getString("Cor")));

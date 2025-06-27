@@ -12,6 +12,7 @@ public class Produto {
     private Marca marca;
     private Long fornecedor;
     private String foto;
+    private String nome;
     
 	public Long getId() {
         return id;
@@ -102,10 +103,15 @@ public class Produto {
     
     }
 
-	public String getNome() {
-		// TODO Auto-generated method stub
-		return null;
-	}
+    public String getNome() {
+        return nome;
+    }
+
+    public void setNome(String nome) {
+        this.nome = nome;
+    }
+
+	
    }
 
 

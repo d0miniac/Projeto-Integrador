@@ -3,6 +3,7 @@ package modelo;
 public class ItemVenda {
     private Produto produto;
     private int quantidade;
+    private String nome;
 
     public Produto getFoto() {
         return produto;
@@ -24,8 +25,11 @@ public class ItemVenda {
         return quantidade;
     }
 
-	public String getNome() {
+    public void setNome(String nome) {
+        this.nome = nome;
+    }
 
-		return null;
-	}
+    public String getNome() {
+        return nome;
+    }
 }
