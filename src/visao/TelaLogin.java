@@ -120,11 +120,11 @@ public class TelaLogin extends JFrame {
             login.setSenha(senha);
 
             FuncionarioDAO dao = new FuncionarioDAO();
-            Funcionario f = dao.logarFuncionario(login);
+            Funcionario fAutenticado = dao.logarFuncionario(login);
 
-            if (f != null) {
+            if (fAutenticado != null) {
             	dispose();
-                TelaMenu tela = new TelaMenu(prod,f, mensagem);
+                TelaMenu tela = new TelaMenu(prod,fAutenticado, mensagem);
                 tela.setVisible(true);
             } else {
                 TelaErro telaErro = new TelaErro("Usuário ou senha inválidos!", 2);

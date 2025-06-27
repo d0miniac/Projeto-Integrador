@@ -201,20 +201,19 @@ public class TelaVendas extends JFrame {
 	}
 
 	private void adicionarAoCarrinho(Produto produto) {
-    Carrinho carrinho = Carrinho.getInstancia();
-    ItemVenda itemExistente = carrinho.getItens().stream()
-            .filter(item -> item.getIdProduto() == produto.getId()).findFirst().orElse(null);
+		Carrinho carrinho = Carrinho.getInstancia();
+		ItemVenda itemExistente = carrinho.getItens().stream()
+				.filter(item -> item.getIdProduto() == produto.getId()).findFirst().orElse(null);
 
-    if (itemExistente != null) {
-        itemExistente.setQuantidade(itemExistente.getQuantidade() + 1);
-    } else {
-        ItemVenda novoItem = new ItemVenda();
-        novoItem.setFoto(produto);                  // armazena o Produto
-        novoItem.setNome(produto.getNome());        // ← ESSA LINHA corrige o problema!
-        novoItem.setQuantidade(1);
-        carrinho.adicionarItem(novoItem);
-    }
+		if (itemExistente != null) {
+			itemExistente.setQuantidade(itemExistente.getQuantidade() + 1);
+		} else {
+			ItemVenda novoItem = new ItemVenda();
+			novoItem.setFoto(produto);
+			novoItem.setQuantidade(1);
+			carrinho.adicionarItem(novoItem);
+		}
 
-    JOptionPane.showMessageDialog(this, "Produto adicionado ao carrinho!");
-}
+		JOptionPane.showMessageDialog(this, "Produto adicionado ao carrinho!");
+	}
 }

@@ -5,57 +5,68 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
+
 import modelo.Funcionario;
 
 public class FuncionarioDAO {
 
-    public int cadastrarFuncionario(Funcionario f) {
-        String sql = "INSERT INTO funcionarios (CPF, NomeFuncionario, Email, Senha, Perfil) VALUES (?,?, ?, ?, ?)";
+    public int cadastrarFuncionario(Funcionario funcionario) {
+        String sql = "INSERT INTO funcionarios (CPF, NomeFuncionario, Email, Senha, Perfil) VALUES (?, ?, ?, ?, ?)";
+
         try (Connection conn = ConexaoBD.getConexaoMySQL();
              PreparedStatement stmt = conn.prepareStatement(sql)) {
 
-            stmt.setString(1, f.getCpf());
-            stmt.setString(2, f.getNome());
-            stmt.setString(3, f.getEmail());
-            stmt.setString(4, f.getSenha());
-            stmt.setString(5, f.getPerfil());
+            stmt.setString(1, funcionario.getCpf());
+            stmt.setString(2, funcionario.getNome());
+            stmt.setString(3, funcionario.getEmail());
+            stmt.setString(4, funcionario.getSenha());
+            stmt.setString(5, funcionario.getPerfil());
 
             return stmt.executeUpdate();
+
         } catch (SQLException e) {
-            e.printStackTrace();
+            System.err.println("Erro ao cadastrar funcionário: " + e.getMessage());
             return 0;
         }
     }
 
-    public Funcionario logarFuncionario(Funcionario f) {
+    public Funcionario logarFuncionario(Funcionario login) {
         String sql = "SELECT * FROM funcionarios WHERE Email = ? AND Senha = ?";
+
         try (Connection conn = ConexaoBD.getConexaoMySQL();
              PreparedStatement stmt = conn.prepareStatement(sql)) {
 
-            stmt.setString(1, f.getEmail());
-            stmt.setString(2, f.getSenha());
+            stmt.setString(1, login.getEmail());
+            stmt.setString(2, login.getSenha());
 
             try (ResultSet rs = stmt.executeQuery()) {
                 if (rs.next()) {
-                    f.setId(rs.getLong("idFuncionario"));
-                    f.setCpf(rs.getString("CPF"));
-                    f.setNome(rs.getString("NomeFuncionario"));
-                    f.setPerfil(rs.getString("Perfil"));
-                    return f;
+                    Funcionario autenticado = new Funcionario();
+                    autenticado.setId(rs.getLong("idFuncionario"));
+                    autenticado.setCpf(rs.getString("CPF"));
+                    autenticado.setNome(rs.getString("NomeFuncionario"));
+                    autenticado.setEmail(rs.getString("Email"));
+                    autenticado.setSenha(rs.getString("Senha"));
+                    autenticado.setPerfil(rs.getString("Perfil"));
+                    return autenticado;
                 }
             }
+
         } catch (SQLException e) {
-            e.printStackTrace();
+            System.err.println("Erro ao logar funcionário: " + e.getMessage());
         }
+
         return null;
     }
 
     public Funcionario buscarPorEmail(String email) {
         String sql = "SELECT * FROM funcionarios WHERE Email = ?";
+
         try (Connection conn = ConexaoBD.getConexaoMySQL();
              PreparedStatement stmt = conn.prepareStatement(sql)) {
 
             stmt.setString(1, email);
+
             try (ResultSet rs = stmt.executeQuery()) {
                 if (rs.next()) {
                     Funcionario funcionario = new Funcionario();
@@ -64,18 +75,22 @@ public class FuncionarioDAO {
                     funcionario.setNome(rs.getString("NomeFuncionario"));
                     funcionario.setEmail(rs.getString("Email"));
                     funcionario.setSenha(rs.getString("Senha"));
+                    funcionario.setPerfil(rs.getString("Perfil"));
                     return funcionario;
                 }
             }
+
         } catch (SQLException e) {
-            e.printStackTrace();
+            System.err.println("Erro ao buscar funcionário por e-mail: " + e.getMessage());
         }
+
         return null;
     }
 
     public ArrayList<Funcionario> selecionarFuncionarios() {
         ArrayList<Funcionario> funcionarios = new ArrayList<>();
         String sql = "SELECT * FROM funcionarios";
+
         try (Connection conn = ConexaoBD.getConexaoMySQL();
              PreparedStatement stmt = conn.prepareStatement(sql);
              ResultSet rs = stmt.executeQuery()) {
@@ -87,45 +102,51 @@ public class FuncionarioDAO {
                 funcionario.setNome(rs.getString("NomeFuncionario"));
                 funcionario.setEmail(rs.getString("Email"));
                 funcionario.setSenha(rs.getString("Senha"));
+                funcionario.setPerfil(rs.getString("Perfil"));
                 funcionarios.add(funcionario);
             }
+
         } catch (SQLException e) {
-            e.printStackTrace();
+            System.err.println("Erro ao selecionar funcionários: " + e.getMessage());
         }
+
         return funcionarios;
     }
 
     public ArrayList<Funcionario> pesquisarFuncionarios(String filtro) {
         ArrayList<Funcionario> listaFuncionarios = new ArrayList<>();
         String sql = "SELECT * FROM funcionarios WHERE NomeFuncionario LIKE ? OR CPF LIKE ? OR Email LIKE ? OR idFuncionario LIKE ?";
+
         try (Connection conn = ConexaoBD.getConexaoMySQL();
              PreparedStatement stmt = conn.prepareStatement(sql)) {
 
-            stmt.setString(1, "%" + filtro + "%");
-            stmt.setString(2, "%" + filtro + "%");
-            stmt.setString(3, "%" + filtro + "%");
-            stmt.setString(4, "%" + filtro + "%");
+            for (int i = 1; i <= 4; i++) {
+                stmt.setString(i, "%" + filtro + "%");
+            }
 
             try (ResultSet rs = stmt.executeQuery()) {
                 while (rs.next()) {
-                    Funcionario f = new Funcionario();
-                    f.setId(rs.getLong("idFuncionario"));
-                    f.setCpf(rs.getString("CPF"));
-                    f.setNome(rs.getString("NomeFuncionario"));
-                    f.setEmail(rs.getString("Email"));
-                    f.setSenha(rs.getString("Senha"));
-                    f.setPerfil(rs.getString("Perfil"));
-                    listaFuncionarios.add(f);
+                    Funcionario funcionario = new Funcionario();
+                    funcionario.setId(rs.getLong("idFuncionario"));
+                    funcionario.setCpf(rs.getString("CPF"));
+                    funcionario.setNome(rs.getString("NomeFuncionario"));
+                    funcionario.setEmail(rs.getString("Email"));
+                    funcionario.setSenha(rs.getString("Senha"));
+                    funcionario.setPerfil(rs.getString("Perfil"));
+                    listaFuncionarios.add(funcionario);
                 }
             }
+
         } catch (SQLException e) {
-            e.printStackTrace();
+            System.err.println("Erro ao pesquisar funcionários: " + e.getMessage());
         }
+
         return listaFuncionarios;
     }
 
     public void alterarFuncionario(Funcionario funcionario) throws SQLException {
         String sql = "UPDATE funcionarios SET CPF = ?, NomeFuncionario = ?, Email = ?, Senha = ? WHERE idFuncionario = ?";
+
         try (Connection conn = ConexaoBD.getConexaoMySQL();
              PreparedStatement stmt = conn.prepareStatement(sql)) {
 
@@ -137,21 +158,26 @@ public class FuncionarioDAO {
 
             stmt.executeUpdate();
             System.out.println("Funcionário atualizado com sucesso: " + funcionario.getId());
+
         } catch (SQLException e) {
-            e.printStackTrace();
+            System.err.println("Erro ao alterar funcionário: " + e.getMessage());
+            throw e;
         }
     }
 
     public void excluirFuncionario(Long idFuncionario) throws SQLException {
         String sql = "DELETE FROM funcionarios WHERE idFuncionario = ?";
+
         try (Connection conn = ConexaoBD.getConexaoMySQL();
              PreparedStatement stmt = conn.prepareStatement(sql)) {
 
             stmt.setLong(1, idFuncionario);
             stmt.executeUpdate();
             System.out.println("Funcionário excluído com sucesso: " + idFuncionario);
+
         } catch (SQLException e) {
-            e.printStackTrace();
+            System.err.println("Erro ao excluir funcionário: " + e.getMessage());
+            throw e;
         }
-    } 
+    }
 }

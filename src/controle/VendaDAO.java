@@ -4,63 +4,78 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.time.LocalDate;
+import java.time.LocalTime;
 import java.util.ArrayList;
 
-import modelo.Categoria;
-import modelo.Cor;
-import modelo.Marca;
-import modelo.Produto;
-import modelo.Tamanho;
 import modelo.Venda;
 
 public class VendaDAO {
-	public int cadastrarVenda(Venda v) {
-		PreparedStatement stmt1 = null;
-		int res1 = 0;
-		Connection conn = ConexaoBD.getConexaoMySQL();
-		try {
-			stmt1 = conn.prepareStatement("insert into armariodigital.vendas(Data_Venda,Total,Funcionario_idFuncionario,Hora_Venda) values (?,?,?,?);");
-			stmt1.setString(1,v.getData());
-			stmt1.setFloat(2,v.getTotal());
-			stmt1.setLong(3,v.getIdFuncionario());
-			stmt1.setString(4, v.getHorario());
-			res1 = stmt1.executeUpdate();
-			stmt1.close();
-			conn.close();
-		} catch (SQLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		return res1;
-	}
-	public ArrayList<Venda> selecionarVendas() {
-		ArrayList<Venda> listaVendas = new ArrayList<>();
-		PreparedStatement stmt1 = null;
-		ResultSet rs = null;
-		Connection conn = ConexaoBD.getConexaoMySQL();
-		try {
-			stmt1 = conn.prepareStatement("SELECT * FROM armariodigital.vendas;");
-			rs = stmt1.executeQuery();
-			while (rs.next()) {
-				Venda v = new Venda();
-				v.setId(rs.getLong("idVenda"));
-				v.setData(rs.getString("Data_Venda"));
-				v.setHorario(rs.getString("Hora_Venda"));
-				v.setIdFuncionario(rs.getLong("Funcionario_idFuncionario"));
-				v.setTotal(rs.getFloat("Total"));
-				listaVendas.add(v);
-				
-				
-				
 
-			}
+    // ✅ Inserir venda e retornar o idVenda gerado
+    public int inserirVenda(LocalDate data, java.math.BigDecimal total, long idFuncionario) throws SQLException {
+        int idVendaGerada = -1;
+        Connection conn = ConexaoBD.getConexaoMySQL();
 
-		} catch (SQLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+        String sql = "INSERT INTO armariodigital.vendas (Data_venda, Total, Funcionario_idFuncionario, Hora_Venda) VALUES (?, ?, ?, ?)";
+        try (PreparedStatement stmt = conn.prepareStatement(sql, PreparedStatement.RETURN_GENERATED_KEYS)) {
+            stmt.setDate(1, java.sql.Date.valueOf(data));
+            stmt.setBigDecimal(2, total);
+            stmt.setLong(3, idFuncionario);
+            stmt.setTime(4, java.sql.Time.valueOf(LocalTime.now()));
 
-		return listaVendas;
+            int res = stmt.executeUpdate();
 
-	}
+            if (res > 0) {
+                try (ResultSet rs = stmt.getGeneratedKeys()) {
+                    if (rs.next()) {
+                        idVendaGerada = rs.getInt(1);
+                    }
+                }
+            }
+        }
+
+        conn.close();
+        return idVendaGerada;
+    }
+
+    // ✅ Inserir item do carrinho vinculado a uma venda
+    public void inserirItemCarrinho(int idVenda, Long idProduto, int quantidade) throws SQLException {
+        String sql = "INSERT INTO armariodigital.carrinho (Venda_idVenda, Produto_idProduto, Quantidade) VALUES (?, ?, ?)";
+
+        try (Connection conn = ConexaoBD.getConexaoMySQL();
+             PreparedStatement stmt = conn.prepareStatement(sql)) {
+
+            stmt.setInt(1, idVenda);
+            stmt.setLong(2, idProduto);
+            stmt.setInt(3, quantidade);
+            stmt.executeUpdate();
+        }
+    }
+
+    // ✅ Selecionar vendas para exibir no histórico
+    public ArrayList<Venda> selecionarVendas() {
+        ArrayList<Venda> listaVendas = new ArrayList<>();
+        String sql = "SELECT * FROM armariodigital.vendas";
+
+        try (Connection conn = ConexaoBD.getConexaoMySQL();
+             PreparedStatement stmt = conn.prepareStatement(sql);
+             ResultSet rs = stmt.executeQuery()) {
+
+            while (rs.next()) {
+                Venda v = new Venda();
+                v.setId(rs.getLong("idVenda"));
+                v.setData(rs.getString("Data_venda"));
+                v.setHorario(rs.getString("Hora_Venda"));
+                v.setIdFuncionario(rs.getLong("Funcionario_idFuncionario"));
+                v.setTotal(rs.getFloat("Total"));
+                listaVendas.add(v);
+            }
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return listaVendas;
+    }
 }

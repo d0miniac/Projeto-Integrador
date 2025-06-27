@@ -3,6 +3,7 @@ package modelo;
 import java.math.BigDecimal;
 
 public class Produto {
+
     private Long id;
     private Tamanho tamanho;
     private Categoria categoria;
@@ -12,9 +13,25 @@ public class Produto {
     private Marca marca;
     private Long fornecedor;
     private String foto;
-    private String nome;
-    
-	public Long getId() {
+
+    // 🔧 Construtor completo (opcional)
+    public Produto(Long id, Tamanho tamanho, Categoria categoria, BigDecimal preco, int quantidade, Cor cor, Marca marca, Long fornecedor, String foto) {
+        this.id = id;
+        this.tamanho = tamanho;
+        this.categoria = categoria;
+        this.preco = preco;
+        this.quantidade = quantidade;
+        this.cor = cor;
+        this.marca = marca;
+        this.fornecedor = fornecedor;
+        this.foto = foto;
+    }
+
+    // 🔧 Construtor vazio (necessário para set manual)
+    public Produto() {
+    }
+
+    public Long getId() {
         return id;
     }
 
@@ -81,7 +98,7 @@ public class Produto {
     public void setMarca(Marca marca) {
         this.marca = marca;
     }
-    
+
     public void setMarca(String marca) {
         this.marca = Marca.getMarcaPorDescricao(marca);
     }
@@ -100,19 +117,21 @@ public class Produto {
 
     public void setFoto(String foto) {
         this.foto = foto;
-    
     }
 
-    public String getNome() {
-        return nome;
+    // 🌟 Nome amigável construído dinamicamente com dados do produto
+    public String getNomeVisual() {
+        StringBuilder sb = new StringBuilder();
+        if (marca != null) sb.append(marca.getDescricao()).append(" ");
+        if (categoria != null) sb.append(categoria.getDescricao()).append(" ");
+        if (cor != null) sb.append(cor.getDescricao()).append(" ");
+        if (tamanho != null) sb.append("(").append(tamanho.getDescricao()).append(")");
+        return sb.toString().trim();
     }
 
-    public void setNome(String nome) {
-        this.nome = nome;
+    // 👁️ Usado para exibição em listas, logs, e combo boxes
+    @Override
+    public String toString() {
+        return getNomeVisual() + " - R$ " + preco;
     }
-
-	
-   }
-
-
-	
+}

@@ -37,7 +37,7 @@ public class TelaQuantidade extends JFrame {
         contentPane.setLayout(new MigLayout("", "[grow][][][][grow]", "[][][][][][][][]"));
 
         // Título
-        JLabel lblTitulo = new JLabel("Produto: " + p.getNome());
+        JLabel lblTitulo = new JLabel("Produto: " + p.getNomeVisual());
         lblTitulo.setHorizontalAlignment(SwingConstants.CENTER);
         contentPane.add(lblTitulo, "cell 1 0 3 1,alignx center");
 

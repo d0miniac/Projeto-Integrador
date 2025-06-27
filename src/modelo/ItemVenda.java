@@ -3,7 +3,6 @@ package modelo;
 public class ItemVenda {
     private Produto produto;
     private int quantidade;
-    private String nome;
 
     public Produto getFoto() {
         return produto;
@@ -25,11 +24,11 @@ public class ItemVenda {
         return quantidade;
     }
 
-    public void setNome(String nome) {
-        this.nome = nome;
-    }
-
+    // 🧠 Nome do produto gerado dinamicamente a partir do Produto
     public String getNome() {
-        return nome;
+        if (produto != null) {
+            return produto.getNomeVisual(); // usa o método da classe Produto
+        }
+        return "Produto sem nome";
     }
 }

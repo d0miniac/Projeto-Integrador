@@ -12,6 +12,8 @@ public class Pagamento {
 	private String cvv;
 	private BigDecimal valorTotal;
 	private LocalDate dataPagamento;
+	private int idVenda;
+
 	public int getIdPagamento() {
 		return idPagamento;
 	}
@@ -60,6 +62,14 @@ public class Pagamento {
 	public void setDataPagamento(LocalDate dataPagamento) {
 		this.dataPagamento = dataPagamento;
 	}
+	public int getIdVenda() {
+    	return idVenda;
+	}
+
+	public void setIdVenda(int idVenda) {
+    	this.idVenda = idVenda;
+	}
+
 
 	
 	

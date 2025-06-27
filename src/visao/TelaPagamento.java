@@ -13,6 +13,7 @@ import javax.swing.event.DocumentListener;
 
 import controle.ClienteDAO;
 import controle.PagamentoDAO;
+import controle.VendaDAO;
 import modelo.Carrinho;
 import modelo.Clientes;
 import modelo.Funcionario;
@@ -130,37 +131,56 @@ public class TelaPagamento extends JFrame {
         txtValidade.getDocument().addDocumentListener(listener);
         txtCVV.getDocument().addDocumentListener(listener);
 
-        btnPagar.addActionListener(e -> {
-            if (!validarCampos()) return;
+       btnPagar.addActionListener(e -> {
+    if (!validarCampos()) return;
 
-            try {
-                Clientes clienteSelecionado = (Clientes) comboClientes.getSelectedItem();
-                if (clienteSelecionado == null) {
-                    JOptionPane.showMessageDialog(null, "Selecione um cliente.");
-                    return;
-                }
+    try {
+        Clientes clienteSelecionado = (Clientes) comboClientes.getSelectedItem();
+        if (clienteSelecionado == null) {
+            JOptionPane.showMessageDialog(null, "Selecione um cliente.");
+            return;
+        }
 
-                Pagamento pagamento = new Pagamento();
-                pagamento.setIdCliente(clienteSelecionado.getidCliente());
-                pagamento.setNumeroCartao(txtCartao.getText().trim());
-                pagamento.setNomeCartao(txtNome.getText().trim());
-                pagamento.setValidade(txtValidade.getText().trim());
-                pagamento.setCvv(txtCVV.getText().trim());
-                pagamento.setValorTotal(calcularTotal());
-                pagamento.setDataPagamento(LocalDate.now());
+        // 1. Registrar a venda
+        VendaDAO vendaDAO = new VendaDAO();
+        Long idFuncionario = funcionario.getId();
+        int idVendaGerado = vendaDAO.inserirVenda(
+            LocalDate.now(),
+            calcularTotal(),
+            idFuncionario
+        );
 
-                new PagamentoDAO().salvarPagamento(pagamento);
-                Carrinho.getInstancia().limpar();
+        // 2. Registrar os itens vendidos no carrinho
+        for (ItemVenda item : carrinho.getItens()) {
+            vendaDAO.inserirItemCarrinho(idVendaGerado, item.getIdProduto(), item.getQuantidade());
+        }
 
-                JOptionPane.showMessageDialog(null, "Pagamento realizado com sucesso para o cliente: " + clienteSelecionado.getNome_Clientes());
-                SwingUtilities.invokeLater(() -> new TelaMenu(null, funcionario, "Compra finalizada com sucesso").setVisible(true));
-                dispose();
+        // 3. Criar e registrar o pagamento vinculado à venda
+        Pagamento pagamento = new Pagamento();
+        pagamento.setIdCliente(clienteSelecionado.getidCliente());
+        pagamento.setNumeroCartao(txtCartao.getText().trim());
+        pagamento.setNomeCartao(txtNome.getText().trim());
+        pagamento.setValidade(txtValidade.getText().trim());
+        pagamento.setCvv(txtCVV.getText().trim());
+        pagamento.setValorTotal(calcularTotal());
+        pagamento.setDataPagamento(LocalDate.now());
+        pagamento.setIdVenda(idVendaGerado); // <-- vínculo fundamental
 
-            } catch (Exception ex) {
-                JOptionPane.showMessageDialog(null, "Erro ao salvar pagamento: " + ex.getMessage());
-                ex.printStackTrace();
-            }
-        });
+        new PagamentoDAO().salvarPagamento(pagamento);
+
+        // 4. Limpa o carrinho e volta ao menu
+        Carrinho.getInstancia().limpar();
+
+        JOptionPane.showMessageDialog(null, "Pagamento realizado com sucesso para o cliente: " + clienteSelecionado.getNome_Clientes());
+
+        SwingUtilities.invokeLater(() -> new TelaMenu(null, funcionario, "Compra finalizada com sucesso").setVisible(true));
+        dispose();
+
+    } catch (Exception ex) {
+        JOptionPane.showMessageDialog(null, "Erro ao registrar venda/pagamento: " + ex.getMessage());
+        ex.printStackTrace();
+    }
+});
     }
 
     private void verificarCampos() {

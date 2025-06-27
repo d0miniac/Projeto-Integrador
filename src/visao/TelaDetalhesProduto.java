@@ -26,7 +26,7 @@ public class TelaDetalhesProduto extends JFrame {
 
         // Informações
         JPanel panelInfo = new JPanel(new GridLayout(0, 1));
-        JLabel lblNome = new JLabel("Produto: " + item.getFoto().getNome());
+        JLabel lblNome = new JLabel("Produto: " + item.getFoto().getNomeVisual());
         JLabel lblPreco = new JLabel("Preço: R$ " + item.getFoto().getPreco());
         JLabel lblQuantidade = new JLabel("Quantidade: " + item.getQuantidade());
 
