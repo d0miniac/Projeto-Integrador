@@ -3,7 +3,6 @@ package visao;
 import java.awt.*;
 import java.awt.event.*;
 import java.util.ArrayList;
-import java.util.List;
 
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
@@ -103,6 +102,18 @@ public class TelaHistoricoVendas extends JFrame {
         scrollPane.setViewportView(table);
 
         estilizarTabela();
+
+        // 👇 Clique para abrir detalhes da venda
+        table.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                int linha = table.getSelectedRow();
+                if (linha >= 0) {
+                    Long idVenda = (Long) table.getValueAt(linha, 0);
+                    new TelaDetalhesVenda(idVenda).setVisible(true);
+                }
+            }
+        });
     }
 
     private void atualizarTabela() {

@@ -91,22 +91,18 @@ public class TelaCarrinho extends JFrame {
             cardItem.setLayout(new BorderLayout());
             cardItem.setBorder(BorderFactory.createLineBorder(Color.LIGHT_GRAY));
 
-            // Imagem do produto com tratamento
             try {
                 Produto produto = item.getFoto();
                 Image image;
 
                 if (produto.getFoto() != null && !produto.getFoto().isEmpty()) {
                     java.net.URL caminho = getClass().getResource("/" + produto.getFoto());
-                    if (caminho != null) {
-                        image = new ImageIcon(caminho).getImage().getScaledInstance(350, 300, Image.SCALE_SMOOTH);
-                    } else {
-                        image = new ImageIcon(getClass().getResource("/img/sem-foto.png"))
-                                    .getImage().getScaledInstance(350, 300, Image.SCALE_SMOOTH);
-                    }
+                    image = caminho != null
+                            ? new ImageIcon(caminho).getImage().getScaledInstance(350, 300, Image.SCALE_SMOOTH)
+                            : new ImageIcon(getClass().getResource("/img/sem-foto.png")).getImage().getScaledInstance(350, 300, Image.SCALE_SMOOTH);
                 } else {
                     image = new ImageIcon(getClass().getResource("/img/sem-foto.png"))
-                                .getImage().getScaledInstance(350, 300, Image.SCALE_SMOOTH);
+                            .getImage().getScaledInstance(350, 300, Image.SCALE_SMOOTH);
                 }
 
                 JLabel lblFoto = new JLabel(new ImageIcon(image));
@@ -119,7 +115,6 @@ public class TelaCarrinho extends JFrame {
                 cardItem.add(lblErro, BorderLayout.CENTER);
             }
 
-            // Detalhes do produto
             JPanel painelDetalhes = new JPanel();
             painelDetalhes.setLayout(new BoxLayout(painelDetalhes, BoxLayout.Y_AXIS));
             painelDetalhes.setBackground(Color.WHITE);
@@ -145,11 +140,21 @@ public class TelaCarrinho extends JFrame {
         btnFinalizar.setPreferredSize(new Dimension(150, 30));
         btnFinalizar.addActionListener(e -> {
             try {
+                // 🔍 Verificação extra para evitar erro de ID nulo
+                if (funcionario == null || funcionario.getId() == null) {
+                    JOptionPane.showMessageDialog(this, "Erro: Funcionário inválido. Faça login novamente.");
+                    dispose();
+                    new TelaLogin(new Produto(), "Retorne ao login", new Funcionario()).setVisible(true);
+                    return;
+                }
+
+                System.out.println("Funcionário logado → ID: " + funcionario.getId());
                 new TelaPagamento(carrinho, funcionario).setVisible(true);
+                dispose();
+
             } catch (SQLException e1) {
                 e1.printStackTrace();
             }
-            dispose();
         });
 
         painelRodape.add(btnFinalizar);
