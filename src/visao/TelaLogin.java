@@ -26,7 +26,7 @@ public class TelaLogin extends JFrame {
                 String mensagem = "Bem-vindo ao sistema!";
                 TelaLogin frame = new TelaLogin(prod,mensagem, funcionario);
                 frame.setVisible(true);
-                frame.setSize(1215, 850);
+                frame.setSize(1200, 750);
                 frame.setResizable(false);
                 frame.setLocationRelativeTo(null);
             } catch (Exception e) {

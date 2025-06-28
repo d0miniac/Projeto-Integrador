@@ -32,7 +32,7 @@ public class TelaMenu extends JFrame {
     public TelaMenu(Produto prod, Funcionario func, String mensagem) {
         setTitle("MENU");
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        setSize(1215, 850);
+        setSize(1190, 750);
         setLocationRelativeTo(null);
         setResizable(false);
 

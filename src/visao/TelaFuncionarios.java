@@ -4,7 +4,6 @@ import java.awt.*;
 import java.awt.event.*;
 import java.sql.SQLException;
 import java.util.ArrayList;
-
 import javax.swing.*;
 import javax.swing.border.LineBorder;
 import javax.swing.table.JTableHeader;
@@ -14,6 +13,8 @@ import modelo.Funcionario;
 import modelo.FuncionarioTableModel;
 import modelo.Produto;
 import net.miginfocom.swing.MigLayout;
+
+// ... [importações e pacote iguais]
 
 public class TelaFuncionarios extends JFrame {
 
@@ -31,7 +32,7 @@ public class TelaFuncionarios extends JFrame {
                 String mensagem = "Bem-vindo ao sistema!";
                 TelaFuncionarios frame = new TelaFuncionarios(prod, funcionario, mensagem);
                 frame.setVisible(true);
-                frame.setSize(1215, 850);
+                frame.setSize(1190, 750);
                 frame.setLocationRelativeTo(null);
             } catch (Exception e) {
                 e.printStackTrace();
@@ -111,7 +112,8 @@ public class TelaFuncionarios extends JFrame {
         scrollPane.setViewportView(table);
 
         theader();
-        atualizarTabela();
+        futm = new FuncionarioTableModel(listarFuncionarios);
+        table.setModel(futm);
 
         JButton btnDelete = new JButton("Deletar");
         btnDelete.addActionListener(e -> {
@@ -124,35 +126,43 @@ public class TelaFuncionarios extends JFrame {
                     return;
                 }
 
-                Object idObj = table.getModel().getValueAt(i, 0);
-                Long id;
-
-                if (idObj instanceof Integer) {
-                    id = ((Integer) idObj).longValue();
-                } else if (idObj instanceof Long) {
-                    id = (Long) idObj;
-                } else {
-                    new TelaErro("Erro ao excluir funcionário!", 0);
-                    return;
-                }
-
-                try {
-                    FuncionarioDAO dao = new FuncionarioDAO();
-                    dao.excluirFuncionario(id);
-                    listarFuncionarios = dao.selecionarFuncionarios();
-                    atualizarTabela();
-                } catch (SQLException e1) {
-                    e1.printStackTrace();
-                    new TelaErro("Erro ao excluir funcionário!", 0);
-                }
+            Object idObj = table.getModel().getValueAt(i, 0);
+            Long id = null;
+            if (idObj instanceof Integer) {
+                id = ((Integer) idObj).longValue();
+            } else if (idObj instanceof Long) {
+                id = (Long) idObj;
+            } else {
+                new TelaErro("Erro ao excluir funcionário!", 0);
+                return;
             }
-        });
+
+            try {
+                FuncionarioDAO dao = new FuncionarioDAO();
+                boolean sucesso = dao.excluirFuncionario(id);  // ✅ Agora retorna boolean
+
+                if (sucesso) {
+                    listarFuncionarios = dao.selecionarFuncionarios();
+                    futm.atualizarDados(listarFuncionarios);
+                    JOptionPane.showMessageDialog(null, "Funcionário excluído com sucesso!");
+                } else {
+                    new TelaErro("Não foi possível excluir. Verifique se o ID está correto ou há restrição no banco.", 0);
+                }
+
+            } catch (SQLException e1) {
+            e1.printStackTrace();
+            new TelaErro("Erro ao excluir funcionário!", 0);
+        }
+    }
+});
+
         configurarBotao(btnDelete);
         panelComponentes.add(btnDelete, "cell 4 1");
 
         JLabel lblSeta = new JLabel();
         lblSeta.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
-        lblSeta.setIcon(new ImageIcon(new ImageIcon(TelaCadastroProdutos.class.getResource("/img/de-volta.png"))
+        lblSeta.setIcon(new ImageIcon(new ImageIcon(
+                TelaCadastroProdutos.class.getResource("/img/de-volta.png"))
                 .getImage().getScaledInstance(70, 70, Image.SCALE_SMOOTH)));
         lblSeta.setBounds(0, 0, 110, 100);
         panelVazio.add(lblSeta);
@@ -174,7 +184,7 @@ public class TelaFuncionarios extends JFrame {
             } else {
                 listarFuncionarios = dao.selecionarFuncionarios();
             }
-            atualizarTabela();
+            futm.atualizarDados(listarFuncionarios);
         });
         configurarBotao(btnPesquisa);
         panelComponentes.add(btnPesquisa, "cell 4 0,alignx center,aligny center");
@@ -193,10 +203,5 @@ public class TelaFuncionarios extends JFrame {
         thead.setForeground(new Color(123, 150, 212));
         thead.setBackground(Color.WHITE);
         thead.setFont(new Font("Tahoma", Font.PLAIN, 20));
-    }
-
-    protected void atualizarTabela() {
-        futm = new FuncionarioTableModel(listarFuncionarios);
-        table.setModel(futm);
     }
 }

@@ -48,7 +48,7 @@ public class TelaHistoricoVendas extends JFrame {
 
         setTitle("Histórico de Vendas");
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        setSize(1215, 850);
+        setSize(1190, 750);
         setLocationRelativeTo(null);
         setResizable(false);
 

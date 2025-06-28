@@ -165,19 +165,15 @@ public class FuncionarioDAO {
         }
     }
 
-    public void excluirFuncionario(Long idFuncionario) throws SQLException {
-        String sql = "DELETE FROM funcionarios WHERE idFuncionario = ?";
-
-        try (Connection conn = ConexaoBD.getConexaoMySQL();
-             PreparedStatement stmt = conn.prepareStatement(sql)) {
-
-            stmt.setLong(1, idFuncionario);
-            stmt.executeUpdate();
-            System.out.println("Funcionário excluído com sucesso: " + idFuncionario);
-
-        } catch (SQLException e) {
-            System.err.println("Erro ao excluir funcionário: " + e.getMessage());
-            throw e;
-        }
+    public boolean excluirFuncionario(Long idFuncionario) throws SQLException {
+    String sql = "DELETE FROM funcionarios WHERE idFuncionario = ?";
+    try (Connection conn = ConexaoBD.getConexaoMySQL();
+         PreparedStatement stmt = conn.prepareStatement(sql)) {
+        stmt.setLong(1, idFuncionario);
+        int linhas = stmt.executeUpdate();
+        System.out.println("Linhas excluídas: " + linhas);
+        return linhas > 0;
     }
+}
+
 }

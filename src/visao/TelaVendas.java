@@ -33,7 +33,7 @@ public class TelaVendas extends JFrame {
 
 		setTitle("Carrinho de Produtos");
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		setSize(1215, 850);
+		setSize(1190, 750);
 		setLocationRelativeTo(null);
 		setResizable(false);
 

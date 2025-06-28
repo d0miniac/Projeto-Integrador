@@ -36,11 +36,15 @@ public class ProdutoDAO {
             stmt1.setString(8, p.getFoto());
 
             res1 = stmt1.executeUpdate();
-
-            stmt1.close();
-            conn.close();
         } catch (Exception e) {
             e.printStackTrace();
+        } finally {
+            try {
+                if (stmt1 != null) stmt1.close();
+                if (conn != null) conn.close();
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
         }
 
         return res1;
@@ -70,11 +74,16 @@ public class ProdutoDAO {
 
                 listaProdutos.add(p);
             }
-            rs.close();
-            stmt1.close();
-            conn.close();
         } catch (SQLException e) {
             e.printStackTrace();
+        } finally {
+            try {
+                if (rs != null) rs.close();
+                if (stmt1 != null) stmt1.close();
+                if (conn != null) conn.close();
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
         }
 
         return listaProdutos;
@@ -82,27 +91,44 @@ public class ProdutoDAO {
 
     public void excluirProdutos(Long id) throws SQLException {
         Connection conn = ConexaoBD.getConexaoMySQL();
-        try (PreparedStatement stmt1 = conn.prepareStatement(
-                "DELETE FROM armariodigital.produtos WHERE idProduto = ?;")) {
+        PreparedStatement stmt1 = null;
+
+        try {
+            stmt1 = conn.prepareStatement(
+                "DELETE FROM armariodigital.produtos WHERE idProduto = ?;"
+            );
             stmt1.setLong(1, id);
             stmt1.executeUpdate();
+        } finally {
+            if (stmt1 != null) stmt1.close();
+            if (conn != null) conn.close();
         }
-        conn.close();
     }
 
     public void excluirProdutosPorFornecedor(Long idFornecedor) throws SQLException {
         String sql = "DELETE FROM armariodigital.produtos WHERE Fornecedor_idFornecedor = ?";
-        try (Connection conn = ConexaoBD.getConexaoMySQL();
-             PreparedStatement stmt = conn.prepareStatement(sql)) {
+        Connection conn = null;
+        PreparedStatement stmt = null;
+
+        try {
+            conn = ConexaoBD.getConexaoMySQL();
+            stmt = conn.prepareStatement(sql);
             stmt.setLong(1, idFornecedor);
             stmt.executeUpdate();
+        } finally {
+            if (stmt != null) stmt.close();
+            if (conn != null) conn.close();
         }
     }
 
     public void alterarProdutos(Produto p) throws SQLException {
         Connection conn = ConexaoBD.getConexaoMySQL();
-        try (PreparedStatement stmt1 = conn.prepareStatement(
-                "UPDATE armariodigital.produtos SET Tamanho=?, Categoria=?, Preco=?, QT_Estoque=?, Cor=?, Marca=?, Fornecedor_idFornecedor=?, Imagem=? WHERE idProduto=?;")) {
+        PreparedStatement stmt1 = null;
+
+        try {
+            stmt1 = conn.prepareStatement(
+                "UPDATE armariodigital.produtos SET Tamanho=?, Categoria=?, Preco=?, QT_Estoque=?, Cor=?, Marca=?, Fornecedor_idFornecedor=?, Imagem=? WHERE idProduto=?;"
+            );
 
             stmt1.setString(1, p.getTamanho().getDescricao());
             stmt1.setString(2, p.getCategoria().getDescricao());
@@ -115,8 +141,10 @@ public class ProdutoDAO {
             stmt1.setLong(9, p.getId());
 
             stmt1.executeUpdate();
+        } finally {
+            if (stmt1 != null) stmt1.close();
+            if (conn != null) conn.close();
         }
-        conn.close();
     }
 
     public ArrayList<Produto> pesquisarProdutos(String filtro) {
@@ -130,8 +158,10 @@ public class ProdutoDAO {
                 "SELECT * FROM armariodigital.produtos " +
                 "WHERE Categoria LIKE ? OR Cor LIKE ? OR Tamanho LIKE ? OR Marca LIKE ?;"
             );
+
+            String filtroLike = "%" + filtro + "%";
             for (int i = 1; i <= 4; i++) {
-                stmt1.setString(i, filtro);
+                stmt1.setString(i, filtroLike);
             }
 
             rs = stmt1.executeQuery();
@@ -149,12 +179,16 @@ public class ProdutoDAO {
 
                 listaProdutos.add(p);
             }
-
-            rs.close();
-            stmt1.close();
-            conn.close();
         } catch (SQLException e) {
             e.printStackTrace();
+        } finally {
+            try {
+                if (rs != null) rs.close();
+                if (stmt1 != null) stmt1.close();
+                if (conn != null) conn.close();
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
         }
 
         return listaProdutos;

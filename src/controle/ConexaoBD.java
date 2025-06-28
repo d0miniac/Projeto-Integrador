@@ -21,6 +21,7 @@ public class ConexaoBD {
         String password = "admin";
         try {
             connection = DriverManager.getConnection(url, username, password);
+            connection.setAutoCommit(true); 
         } catch (SQLException e) {
             e.printStackTrace();
             System.out.println("BD não conectado");

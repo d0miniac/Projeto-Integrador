@@ -33,7 +33,7 @@ public class TelaFornecedores extends JFrame {
 	            String mensagem = "Bem-vindo ao sistema!";
 	            TelaFornecedores frame = new TelaFornecedores(prod,funcionario, mensagem);
 	            frame.setVisible(true);
-	            frame.setSize(1215, 850);
+	            frame.setSize(1190, 750);
 	            frame.setLocationRelativeTo(null);
 	        } catch (Exception e) {
 
