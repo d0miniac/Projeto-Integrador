@@ -29,7 +29,7 @@ public class TelaCarrinho extends JFrame {
 
         setTitle("Carrinho de Compras");
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-        setSize(1215, 850);
+        setSize(1190, 750);
         setLocationRelativeTo(null);
         setResizable(false);
 

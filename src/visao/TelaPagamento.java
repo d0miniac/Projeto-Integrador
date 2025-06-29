@@ -103,7 +103,7 @@ public class TelaPagamento extends JFrame {
         panelCentro.add(lblTotal, "cell 1 6");
 
         // Botão pagar
-        btnPagar = new JButton("Pagar");
+        btnPagar = new JButton("Finalizar");
         btnPagar.setFont(new Font("Arial", Font.BOLD, 16));
         btnPagar.setBackground(new Color(33, 150, 83));
         btnPagar.setForeground(Color.WHITE);
