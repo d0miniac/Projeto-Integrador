@@ -149,7 +149,7 @@ public class TelaFuncionarios extends JFrame {
                     new TelaErro("Não foi possível excluir. Verifique se o ID está correto ou há restrição no banco.", 0);
                 }
 
-            } catch (SQLException e1) {
+        } catch (SQLException e1) {
             e1.printStackTrace();
             new TelaErro("Erro ao excluir funcionário!", 0);
         }

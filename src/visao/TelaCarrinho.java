@@ -4,6 +4,7 @@ import java.awt.*;
 import java.awt.event.*;
 import java.sql.SQLException;
 import java.util.ArrayList;
+
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
 
@@ -15,7 +16,6 @@ import net.miginfocom.swing.MigLayout;
 
 public class TelaCarrinho extends JFrame {
 
-    private JPanel contentPane;
     private Carrinho carrinho;
     private ArrayList<ItemVenda> listaItens;
     private Funcionario funcionario;
@@ -28,65 +28,83 @@ public class TelaCarrinho extends JFrame {
         this.funcionario = funcionario;
 
         setTitle("Carrinho de Compras");
-        setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-        setSize(1190, 750);
+        setSize(1000, 600);
         setLocationRelativeTo(null);
         setResizable(false);
 
-        contentPane = new JPanel(new BorderLayout());
-        contentPane.setBackground(new Color(32, 60, 115));
-        contentPane.setBorder(new EmptyBorder(10, 10, 10, 10));
+        ImagePanel contentPane = new ImagePanel(getClass().getResource("/img/bgCadastroFornecedores.png"));
+        contentPane.setLayout(new MigLayout("insets 0, gap 0", "[grow]", "[100px][grow][100px]"));
         setContentPane(contentPane);
 
-        criarCabecalho();
-        criarPainelItens();
-        criarRodape();
+        criarBarraTopo(contentPane);
+        criarPainelItens(contentPane);
+        criarRodape(contentPane);
     }
 
-    private void criarCabecalho() {
-        JPanel painelTopo = new JPanel(new FlowLayout(FlowLayout.LEFT));
-        painelTopo.setBackground(new Color(32, 60, 115));
+    private void criarBarraTopo(JPanel parent) {
+        ImagePanel barraTopo = new ImagePanel(getClass().getResource("/img/barraParteDeCima.png")) {
+            @Override
+            public Dimension getPreferredSize() {
+                return new Dimension(parent.getWidth(), 100);
+            }
+        };
+        barraTopo.setLayout(new BorderLayout());
+        barraTopo.setOpaque(false);
 
-        JLabel lblSeta = new JLabel();
-        lblSeta.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
-        try {
-            ImageIcon seta = new ImageIcon(getClass().getResource("/img/de-volta.png"));
-            Image voltar = seta.getImage().getScaledInstance(70, 70, Image.SCALE_SMOOTH);
-            lblSeta.setIcon(new ImageIcon(voltar));
-        } catch (Exception e) {
-            lblSeta.setText("Voltar");
-        }
+        JPanel esquerda = new JPanel(new FlowLayout(FlowLayout.LEFT));
+        esquerda.setOpaque(false);
 
-        lblSeta.addMouseListener(new MouseAdapter() {
+        JLabel lblVoltar = new JLabel(new ImageIcon(
+            new ImageIcon(getClass().getResource("/img/de-volta.png"))
+                .getImage().getScaledInstance(40, 40, Image.SCALE_SMOOTH)
+        ));
+        lblVoltar.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+        lblVoltar.addMouseListener(new MouseAdapter() {
             public void mouseClicked(MouseEvent e) {
                 dispose();
                 new TelaVendas(produto, funcionario, mensagem).setVisible(true);
             }
         });
 
-        JLabel lblTitulo = new JLabel("CARRINHO");
+        JLabel lblTitulo = new JLabel("Carrinho de Compras");
+        lblTitulo.setFont(new Font("Arial", Font.BOLD, 28));
         lblTitulo.setForeground(Color.WHITE);
-        lblTitulo.setFont(new Font("Arial", Font.BOLD, 24));
+        lblTitulo.setBorder(new EmptyBorder(0, 15, 0, 0));
 
-        painelTopo.add(lblSeta);
-        painelTopo.add(lblTitulo);
-        contentPane.add(painelTopo, BorderLayout.NORTH);
+        esquerda.add(lblVoltar);
+        esquerda.add(lblTitulo);
+        barraTopo.add(esquerda, BorderLayout.WEST);
+
+        JPanel direita = new JPanel(new FlowLayout(FlowLayout.RIGHT));
+        direita.setOpaque(false);
+        JLabel lblLogo = new JLabel(new ImageIcon(
+            new ImageIcon(getClass().getResource("/img/armariodigital.png"))
+                .getImage().getScaledInstance(150, 80, Image.SCALE_SMOOTH)
+        ));
+        direita.add(lblLogo);
+        barraTopo.add(direita, BorderLayout.EAST);
+
+        parent.add(barraTopo, "cell 0 0, growx, pushx, h 100!");
     }
 
-    private void criarPainelItens() {
+    private void criarPainelItens(JPanel parent) {
         JPanel painelCentro = new JPanel(new BorderLayout());
+        painelCentro.setOpaque(false);
+
         JScrollPane scrollPane = new JScrollPane();
+        scrollPane.setOpaque(false);
+        scrollPane.getViewport().setOpaque(false);
+        scrollPane.setBorder(null);
         scrollPane.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
-        painelCentro.add(scrollPane, BorderLayout.CENTER);
 
         JPanel painelItens = new JPanel();
-        painelItens.setBackground(Color.WHITE);
-        painelItens.setLayout(new MigLayout("wrap 3", "[grow]", "[]"));
+        painelItens.setOpaque(false);
+        painelItens.setLayout(new MigLayout("wrap 3", "[fill][fill][fill]", "20[]20"));
         scrollPane.setViewportView(painelItens);
 
         for (ItemVenda item : listaItens) {
             JPanel cardItem = new JPanel();
-            cardItem.setPreferredSize(new Dimension(350, 400));
+            cardItem.setPreferredSize(new Dimension(300, 380));
             cardItem.setBackground(Color.WHITE);
             cardItem.setLayout(new BorderLayout());
             cardItem.setBorder(BorderFactory.createLineBorder(Color.LIGHT_GRAY));
@@ -98,49 +116,76 @@ public class TelaCarrinho extends JFrame {
                 if (produto.getFoto() != null && !produto.getFoto().isEmpty()) {
                     java.net.URL caminho = getClass().getResource("/" + produto.getFoto());
                     image = caminho != null
-                            ? new ImageIcon(caminho).getImage().getScaledInstance(350, 300, Image.SCALE_SMOOTH)
-                            : new ImageIcon(getClass().getResource("/img/sem-foto.png")).getImage().getScaledInstance(350, 300, Image.SCALE_SMOOTH);
+                        ? new ImageIcon(caminho).getImage().getScaledInstance(300, 240, Image.SCALE_SMOOTH)
+                        : new ImageIcon(getClass().getResource("/img/sem-foto.png")).getImage().getScaledInstance(300, 240, Image.SCALE_SMOOTH);
                 } else {
                     image = new ImageIcon(getClass().getResource("/img/sem-foto.png"))
-                            .getImage().getScaledInstance(350, 300, Image.SCALE_SMOOTH);
+                        .getImage().getScaledInstance(300, 240, Image.SCALE_SMOOTH);
                 }
 
                 JLabel lblFoto = new JLabel(new ImageIcon(image));
                 cardItem.add(lblFoto, BorderLayout.CENTER);
 
             } catch (Exception ex) {
-                ex.printStackTrace();
                 JLabel lblErro = new JLabel("Imagem indisponível", SwingConstants.CENTER);
-                lblErro.setPreferredSize(new Dimension(350, 300));
+                lblErro.setPreferredSize(new Dimension(300, 240));
                 cardItem.add(lblErro, BorderLayout.CENTER);
             }
 
             JPanel painelDetalhes = new JPanel();
             painelDetalhes.setLayout(new BoxLayout(painelDetalhes, BoxLayout.Y_AXIS));
             painelDetalhes.setBackground(Color.WHITE);
-            painelDetalhes.setBorder(new EmptyBorder(5, 10, 5, 10));
+            painelDetalhes.setBorder(new EmptyBorder(5, 10, 10, 10));
 
             JLabel lblNome = new JLabel("Produto: " + item.getNome());
             JLabel lblQuantidade = new JLabel("Quantidade: " + item.getQuantidade());
             painelDetalhes.add(lblNome);
             painelDetalhes.add(lblQuantidade);
 
+            JButton btnRemover = new JButton("Remover");
+            btnRemover.setBackground(new Color(220, 53, 69));
+            btnRemover.setForeground(Color.WHITE);
+            btnRemover.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+            btnRemover.setAlignmentX(Component.LEFT_ALIGNMENT);
+
+            btnRemover.addActionListener(e -> {
+                int opcao = JOptionPane.showConfirmDialog(this,
+                        "Deseja remover este item do carrinho?",
+                        "Confirmação",
+                        JOptionPane.YES_NO_OPTION);
+
+                if (opcao == JOptionPane.YES_OPTION) {
+                    listaItens.remove(item);
+                    carrinho.setItens(listaItens);
+                    dispose();
+                    new TelaCarrinho(carrinho, funcionario).setVisible(true);
+                }
+            });
+
+            painelDetalhes.add(Box.createVerticalStrut(8));
+            painelDetalhes.add(btnRemover);
+
             cardItem.add(painelDetalhes, BorderLayout.SOUTH);
-            painelItens.add(cardItem);
+            painelItens.add(cardItem, "gapbottom 20");
         }
 
-        contentPane.add(painelCentro, BorderLayout.CENTER);
+        painelCentro.add(scrollPane, BorderLayout.CENTER);
+        parent.add(painelCentro, "cell 0 1, grow");
     }
 
-    private void criarRodape() {
-        JPanel painelRodape = new JPanel(new FlowLayout(FlowLayout.RIGHT));
-        painelRodape.setBackground(new Color(32, 60, 115));
+    private void criarRodape(JPanel parent) {
+        JPanel painelRodape = new JPanel(new FlowLayout(FlowLayout.RIGHT, 30, 20));
+        painelRodape.setOpaque(false);
 
-        JButton btnFinalizar = new JButton("Finalizar Compra");
-        btnFinalizar.setPreferredSize(new Dimension(150, 30));
+        JButton btnFinalizar = new JButton("FINALIZAR COMPRA");
+        btnFinalizar.setFont(new Font("Tahoma", Font.BOLD, 16));
+        btnFinalizar.setPreferredSize(new Dimension(220, 45));
+        btnFinalizar.setBackground(new Color(32, 60, 115));
+        btnFinalizar.setForeground(Color.WHITE);
+        btnFinalizar.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+
         btnFinalizar.addActionListener(e -> {
             try {
-                // 🔍 Verificação extra para evitar erro de ID nulo
                 if (funcionario == null || funcionario.getId() == null) {
                     JOptionPane.showMessageDialog(this, "Erro: Funcionário inválido. Faça login novamente.");
                     dispose();
@@ -148,7 +193,6 @@ public class TelaCarrinho extends JFrame {
                     return;
                 }
 
-                System.out.println("Funcionário logado → ID: " + funcionario.getId());
                 new TelaPagamento(carrinho, funcionario).setVisible(true);
                 dispose();
 
@@ -158,6 +202,6 @@ public class TelaCarrinho extends JFrame {
         });
 
         painelRodape.add(btnFinalizar);
-        contentPane.add(painelRodape, BorderLayout.SOUTH);
+        parent.add(painelRodape, "cell 0 2, align right, growx");
     }
 }

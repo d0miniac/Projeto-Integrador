@@ -110,7 +110,7 @@ public class TelaHistoricoVendas extends JFrame {
                 int linha = table.getSelectedRow();
                 if (linha >= 0) {
                     Long idVenda = (Long) table.getValueAt(linha, 0);
-                    new TelaDetalhesVenda(idVenda).setVisible(true);
+                    new TelaDetalhesVenda(idVenda, prod, func, mensagem).setVisible(true);
                 }
             }
         });

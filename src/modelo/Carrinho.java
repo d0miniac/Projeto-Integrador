@@ -23,6 +23,10 @@ public class Carrinho {
         return itens;
     }
 
+    public void setItens(List<ItemVenda> itens) {
+        this.itens = itens;
+    }
+
     public void adicionarItem(ItemVenda item) {
         itens.add(item);
     }
@@ -35,7 +39,6 @@ public class Carrinho {
         itens.clear();
     }
 
-    // Método corrigido para usar BigDecimal
     public BigDecimal getTotal() {
         BigDecimal total = BigDecimal.ZERO;
         for (ItemVenda item : itens) {
