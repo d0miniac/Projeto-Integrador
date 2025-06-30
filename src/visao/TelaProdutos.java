@@ -177,7 +177,7 @@ public class TelaProdutos extends JFrame {
 				TelaErro telaErro = new TelaErro("Deseja realmente excluir esse produto?");
 				int resposta = telaErro.getResposta();
 
-				if (resposta == 0) {
+				if (resposta == 1) {
 					int i = tableProdutos.getSelectedRow();
 					if (i != -1) {
 						Long id = (Long) tableProdutos.getModel().getValueAt(i, 0);

@@ -167,13 +167,13 @@ public class FuncionarioDAO {
 
     public boolean excluirFuncionario(Long idFuncionario) throws SQLException {
     String sql = "DELETE FROM funcionarios WHERE idFuncionario = ?";
-    try (Connection conn = ConexaoBD.getConexaoMySQL();
-         PreparedStatement stmt = conn.prepareStatement(sql)) {
+    Connection conn = ConexaoBD.getConexaoMySQL();
+         PreparedStatement stmt = conn.prepareStatement(sql);
         stmt.setLong(1, idFuncionario);
         int linhas = stmt.executeUpdate();
         System.out.println("Linhas excluídas: " + linhas);
         return linhas > 0;
-    }
+    
 }
 
 }

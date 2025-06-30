@@ -119,23 +119,19 @@ public class TelaFuncionarios extends JFrame {
         btnDelete.addActionListener(e -> {
             TelaErro telaErro = new TelaErro("Deseja realmente excluir este funcionário?");
             int resposta = telaErro.getResposta();
-            if (resposta == 0) {
+            if (resposta == 1) {
                 int i = table.getSelectedRow();
                 if (i == -1) {
                     new TelaErro("Selecione um funcionário para excluir!", 1);
                     return;
                 }
 
-            Object idObj = table.getModel().getValueAt(i, 0);
-            Long id = null;
-            if (idObj instanceof Integer) {
-                id = ((Integer) idObj).longValue();
-            } else if (idObj instanceof Long) {
-                id = (Long) idObj;
-            } else {
-                new TelaErro("Erro ao excluir funcionário!", 0);
-                return;
-            }
+                
+             
+            FuncionarioTableModel ftbm =(FuncionarioTableModel) table.getModel();
+            Funcionario f = ftbm.getFuncionario(table.getSelectedRow());
+            Long id = f.getId();
+           
 
             try {
                 FuncionarioDAO dao = new FuncionarioDAO();

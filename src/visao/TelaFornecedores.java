@@ -147,7 +147,7 @@ public class TelaFornecedores extends JFrame {
 		        TelaErro telaErro = new TelaErro("Deseja realmente excluir esse fornecedor?");
 		        int resposta = telaErro.getResposta(); 
 
-		        if (resposta == 0) {  
+		        if (resposta == 1) {  
 		            int i = tableFornecedores.getSelectedRow();
 		            if (i != -1) {  
 		                Long id = (Long) tableFornecedores.getModel().getValueAt(i, 0);
