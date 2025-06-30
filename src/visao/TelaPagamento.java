@@ -8,49 +8,57 @@ import javax.swing.*;
 import javax.swing.border.MatteBorder;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
+
 import java.awt.*;
 import java.awt.event.*;
 import java.math.BigDecimal;
 import java.sql.SQLException;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
-import java.util.List;
 
 public class TelaPagamento extends JFrame {
     private JComboBox<Clientes> comboClientes;
     private JTextField txtCartao, txtNome, txtValidade, txtCVV;
     private JLabel lblDataPagamento, lblTotal;
     private JButton btnPagar;
-    private Funcionario funcionario;
     private Carrinho carrinho;
+    private Funcionario funcionario;
 
     public TelaPagamento(Carrinho carrinho, Funcionario funcionario) throws SQLException {
         this.funcionario = funcionario;
         this.carrinho = carrinho;
-        this.setTitle("Pagamento");
-        this.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-        this.setSize(1000, 600);
-        this.setLocationRelativeTo(null);
-        this.setResizable(false);
+        setTitle("Pagamento");
+        setSize(657, 425);
+        setLocationRelativeTo(null);
+        setResizable(false);
 
-        ImagePanel painelFundo = new ImagePanel(getClass().getResource("/img/Fundo.png"));
+        ImagePanel painelFundo = new ImagePanel(getClass().getResource("/img/bgCadastroFornecedores.png"));
         painelFundo.setLayout(new BorderLayout());
         setContentPane(painelFundo);
 
-        criarBarraTopo(painelFundo);
-        criarFormulario(painelFundo);
-        criarRodape(painelFundo);
+        criarPainelTopo(painelFundo);
+        criarPainelMeio(painelFundo);
+        criarPainelInferior(painelFundo);
     }
 
-    private void criarBarraTopo(JPanel parent) {
-        ImageIcon imgBarra = new ImageIcon(getClass().getResource("/img/barraParteDeCima.png"));
-        JLabel barraTopo = new JLabel(imgBarra);
-        barraTopo.setLayout(new MigLayout("", "10[]10[grow]10[]10", "10[80]10"));
+    private void criarPainelTopo(JPanel painel) {
+        JPanel barraTopo = new JPanel(new BorderLayout());
         barraTopo.setPreferredSize(new Dimension(0, 100));
+        barraTopo.setOpaque(false);
+        painel.add(barraTopo, BorderLayout.NORTH);
 
+        JLabel bgBarra = new JLabel(new ImageIcon(
+            new ImageIcon(getClass().getResource("/img/barraParteDeCima.png"))
+                .getImage().getScaledInstance(657, 100, Image.SCALE_SMOOTH)
+        ));
+        bgBarra.setLayout(new BorderLayout());
+        barraTopo.add(bgBarra, BorderLayout.CENTER);
+
+        JPanel esquerda = new JPanel(new FlowLayout(FlowLayout.LEFT));
+        esquerda.setOpaque(false);
         JLabel lblVoltar = new JLabel(new ImageIcon(
             new ImageIcon(getClass().getResource("/img/de-volta.png"))
-                    .getImage().getScaledInstance(70, 70, Image.SCALE_SMOOTH)
+                .getImage().getScaledInstance(40, 40, Image.SCALE_SMOOTH)
         ));
         lblVoltar.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
         lblVoltar.addMouseListener(new MouseAdapter() {
@@ -59,97 +67,111 @@ public class TelaPagamento extends JFrame {
                 new TelaCarrinho(carrinho, funcionario).setVisible(true);
             }
         });
-        barraTopo.add(lblVoltar, "cell 0 0,alignx left,aligny center");
+        esquerda.add(lblVoltar);
+        bgBarra.add(esquerda, BorderLayout.WEST);
 
         JLabel lblTitulo = new JLabel("Pagamento");
-        lblTitulo.setFont(new Font("Arial", Font.BOLD, 30));
+        lblTitulo.setFont(new Font("Arial", Font.BOLD, 28));
         lblTitulo.setForeground(Color.WHITE);
-        barraTopo.add(lblTitulo, "growx,alignx center");
+        lblTitulo.setHorizontalAlignment(SwingConstants.CENTER);
+        bgBarra.add(lblTitulo, BorderLayout.CENTER);
 
+        JPanel direita = new JPanel(new FlowLayout(FlowLayout.RIGHT));
+        direita.setOpaque(false);
         JLabel lblLogo = new JLabel(new ImageIcon(
             new ImageIcon(getClass().getResource("/img/armariodigital.png"))
-                    .getImage().getScaledInstance(150, 80, Image.SCALE_SMOOTH)
+                .getImage().getScaledInstance(150, 80, Image.SCALE_SMOOTH)
         ));
-        barraTopo.add(lblLogo, "cell 3 0,alignx right,aligny center");
-
-        parent.add(barraTopo, BorderLayout.NORTH);
+        direita.add(lblLogo);
+        bgBarra.add(direita, BorderLayout.EAST);
     }
+    private void criarPainelMeio(JPanel painel) throws SQLException {
+        JPanel painelCentral = new JPanel(new MigLayout("", "[grow]", "[][grow]"));
+        painelCentral.setOpaque(false);
 
-    private void criarFormulario(JPanel parent) throws SQLException {
-        JPanel content = new JPanel(new MigLayout("", "[grow]", "[grow]"));
-        content.setOpaque(false);
+        JLabel lblSubtitulo = new JLabel("Informações de Pagamento");
+        lblSubtitulo.setFont(new Font("Tahoma", Font.BOLD, 16));
+        lblSubtitulo.setForeground(new Color(153, 162, 209));
+        painelCentral.add(lblSubtitulo, "cell 0 0");
 
-        JPanel form = new JPanel(new MigLayout("", "[grow][grow]", "[][]20[][]20[][]20[][]20[][]"));
-        form.setOpaque(false);
-        form.setBorder(new MatteBorder(0,0,5,0,new Color(32,60,115,124)));
+        JPanel meio = new JPanel(new MigLayout("", "[grow][grow]", "[][][][][][]"));
+        meio.setOpaque(false);
+        meio.setBorder(new MatteBorder(0, 0, 5, 0, new Color(32, 60, 115, 124)));
 
-        adicionarCampo(form, "Cliente:", comboClientes = new JComboBox<>());
-        adicionarCampo(form, "Número do Cartão:", txtCartao = new JTextField());
-        adicionarCampo(form, "Nome no Cartão:", txtNome = new JTextField());
-        adicionarCampo(form, "Validade (MM/AA):", txtValidade = new JTextField());
-        adicionarCampo(form, "CVV:", txtCVV = new JTextField());
-        adicionarCampoLabel(form, "Data de Pagamento:", lblDataPagamento =
-            new JLabel(LocalDate.now().format(DateTimeFormatter.ofPattern("dd/MM/yyyy"))));
-        adicionarCampoLabel(form, "Total:", lblTotal =
-            new JLabel("R$ " + calcularTotal().toString().replace(".", ",")));
+        meio.add(criarLabel("Cliente:"), "cell 0 0");
+        comboClientes = new JComboBox<>();
+        meio.add(comboClientes, "cell 1 0,growx");
 
-        lblDataPagamento.setForeground(Color.WHITE);
-        lblTotal.setForeground(Color.WHITE);
+        meio.add(criarLabel("Número do Cartão:"), "cell 0 1");
+        txtCartao = new JTextField();
+        meio.add(txtCartao, "cell 1 1,growx");
 
-        content.add(form, "center");
-        parent.add(content, BorderLayout.CENTER);
+        meio.add(criarLabel("Nome no Cartão:"), "cell 0 2");
+        txtNome = new JTextField();
+        meio.add(txtNome, "cell 1 2,growx");
+
+        meio.add(criarLabel("Validade (MM/AA):"), "cell 0 3");
+        txtValidade = new JTextField();
+        meio.add(txtValidade, "cell 1 3,growx");
+
+        meio.add(criarLabel("CVV:"), "cell 0 4");
+        txtCVV = new JTextField();
+        meio.add(txtCVV, "cell 1 4,growx");
+
+        meio.add(criarLabel("Data de Pagamento:"), "cell 0 5");
+        lblDataPagamento = new JLabel(LocalDate.now().format(DateTimeFormatter.ofPattern("dd/MM/yyyy")));
+        lblDataPagamento.setForeground(Color.BLACK);
+        meio.add(lblDataPagamento, "cell 1 5");
+
+        meio.add(criarLabel("Total:"), "cell 0 6");
+        lblTotal = new JLabel("R$ " + calcularTotal().toString().replace(".", ","));
+        lblTotal.setForeground(Color.BLACK);
+        meio.add(lblTotal, "cell 1 6");
+
+        painelCentral.add(meio, "cell 0 1,grow");
+        painel.add(painelCentral, BorderLayout.CENTER);
 
         carregarClientes();
         configurarListeners();
     }
 
-    private void criarRodape(JPanel parent) {
-        JPanel rodape = new JPanel(new FlowLayout(FlowLayout.RIGHT, 20, 10));
-        rodape.setOpaque(false);
+    private void criarPainelInferior(JPanel painel) {
+        JPanel inferior = new JPanel(new FlowLayout(FlowLayout.CENTER, 30, 20));
+        inferior.setOpaque(false);
+
         btnPagar = new JButton("FINALIZAR PAGAMENTO");
-        btnPagar.setFont(new Font("Arial", Font.BOLD, 16));
         btnPagar.setBackground(new Color(32, 60, 115));
         btnPagar.setForeground(Color.WHITE);
-        btnPagar.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+        btnPagar.setFont(new Font("Arial", Font.BOLD, 14));
         btnPagar.setEnabled(false);
+        btnPagar.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
         btnPagar.addActionListener(e -> processarPagamento());
-        rodape.add(btnPagar);
-        parent.add(rodape, BorderLayout.SOUTH);
+
+        inferior.add(btnPagar);
+        painel.add(inferior, BorderLayout.SOUTH);
     }
 
-    private void adicionarCampo(JPanel form, String rotulo, JComponent comp) {
-        JLabel lbl = new JLabel(rotulo);
-        configurarLabel(lbl);
-        form.add(lbl);
-        form.add(comp, "growx");
-    }
-
-    private void adicionarCampoLabel(JPanel form, String rotulo, JLabel lbl) {
-        JLabel l = new JLabel(rotulo);
-        configurarLabel(l);
-        form.add(l);
-        form.add(lbl, "growx");
-    }
-
-    private void configurarLabel(JLabel l) {
-        l.setFont(new Font("Tahoma", Font.BOLD, 14));
-        l.setForeground(Color.WHITE);
+    private JLabel criarLabel(String texto) {
+        JLabel label = new JLabel(texto);
+        label.setFont(new Font("Tahoma", Font.BOLD, 14));
+        label.setForeground(Color.BLACK); // Rótulos com fonte preta ✔️
+        return label;
     }
 
     private void configurarListeners() {
-        DocumentListener dl = new DocumentListener() {
+        DocumentListener listener = new DocumentListener() {
             public void insertUpdate(DocumentEvent e) { atualizarBotao(); }
             public void removeUpdate(DocumentEvent e) { atualizarBotao(); }
             public void changedUpdate(DocumentEvent e) { atualizarBotao(); }
         };
-        txtCartao.getDocument().addDocumentListener(dl);
-        txtNome.getDocument().addDocumentListener(dl);
-        txtValidade.getDocument().addDocumentListener(dl);
-        txtCVV.getDocument().addDocumentListener(dl);
+        txtCartao.getDocument().addDocumentListener(listener);
+        txtNome.getDocument().addDocumentListener(listener);
+        txtValidade.getDocument().addDocumentListener(listener);
+        txtCVV.getDocument().addDocumentListener(listener);
     }
 
     private void atualizarBotao() {
-        boolean ok = comboClientes.getItemCount()>0 &&
+        boolean ok = comboClientes.getItemCount() > 0 &&
                      !txtCartao.getText().isEmpty() &&
                      !txtNome.getText().isEmpty() &&
                      !txtValidade.getText().isEmpty() &&
@@ -164,67 +186,84 @@ public class TelaPagamento extends JFrame {
     }
 
     private BigDecimal calcularTotal() {
-        BigDecimal soma = BigDecimal.ZERO;
+        BigDecimal total = BigDecimal.ZERO;
         for (ItemVenda item : carrinho.getItens()) {
-            if (item.getFoto()!=null && item.getFoto().getPreco()!=null) {
-                soma = soma.add(item.getFoto().getPreco().multiply(BigDecimal.valueOf(item.getQuantidade())));
+            if (item.getFoto() != null && item.getFoto().getPreco() != null) {
+                total = total.add(item.getFoto().getPreco().multiply(BigDecimal.valueOf(item.getQuantidade())));
             }
         }
-        return soma;
+        return total;
     }
 
     private void processarPagamento() {
         if (!validarCampos()) return;
+
         try {
-            Clientes sel = (Clientes) comboClientes.getSelectedItem();
-            VendaDAO vdao = new VendaDAO();
-            int idVenda = vdao.inserirVenda(LocalDate.now(), calcularTotal(), funcionario.getId());
-            for (ItemVenda iv : carrinho.getItens())
-                vdao.inserirItemCarrinho(idVenda, iv.getIdProduto(), iv.getQuantidade());
+            Clientes clienteSelecionado = (Clientes) comboClientes.getSelectedItem();
+            VendaDAO vendaDAO = new VendaDAO();
+            int idVenda = vendaDAO.inserirVenda(LocalDate.now(), calcularTotal(), funcionario.getId());
 
-            Pagamento p = new Pagamento();
-            p.setIdCliente(sel.getidCliente());
-            p.setNumeroCartao(txtCartao.getText().trim());
-            p.setNomeCartao(txtNome.getText().trim());
-            p.setValidade(txtValidade.getText().trim());
-            p.setCvv(txtCVV.getText().trim());
-            p.setValorTotal(calcularTotal());
-            p.setDataPagamento(LocalDate.now());
-            p.setIdVenda(idVenda);
-            new PagamentoDAO().salvarPagamento(p);
+            for (ItemVenda iv : carrinho.getItens()) {
+                vendaDAO.inserirItemCarrinho(idVenda, iv.getIdProduto(), iv.getQuantidade());
+            }
 
+            Pagamento pagamento = new Pagamento();
+            pagamento.setIdCliente(clienteSelecionado.getidCliente());
+            pagamento.setNumeroCartao(txtCartao.getText().trim());
+            pagamento.setNomeCartao(txtNome.getText().trim());
+            pagamento.setValidade(txtValidade.getText().trim());
+            pagamento.setCvv(txtCVV.getText().trim());
+            pagamento.setValorTotal(calcularTotal());
+            pagamento.setDataPagamento(LocalDate.now());
+            pagamento.setIdVenda(idVenda);
+
+            new PagamentoDAO().salvarPagamento(pagamento);
             Carrinho.getInstancia().limpar();
-            JOptionPane.showMessageDialog(this, "Pagamento efetuado com sucesso!");
+
+            new TelaErro("Pagamento efetuado com sucesso!", 3).setVisible(true);
             dispose();
             new TelaMenu(null, funcionario, "Compra finalizada com sucesso").setVisible(true);
+
         } catch (Exception ex) {
             ex.printStackTrace();
-            JOptionPane.showMessageDialog(this, "Erro ao registrar pagamento: " + ex.getMessage());
+            new TelaErro("Erro ao registrar pagamento: " + ex.getMessage(), 0).setVisible(true);
         }
     }
 
     private boolean validarCampos() {
-        String c = txtCartao.getText().trim(),
-               n = txtNome.getText().trim(),
-               v = txtValidade.getText().trim(),
-               cv = txtCVV.getText().trim();
+        String c = txtCartao.getText().trim();
+        String n = txtNome.getText().trim();
+        String v = txtValidade.getText().trim();
+        String cv = txtCVV.getText().trim();
 
-        if (!c.matches("\\d{16}"))      { mostrarErro("Cartão deve ter 16 dígitos."); return false; }
-        if (!cv.matches("\\d{3}"))     { mostrarErro("CVV deve ter 3 dígitos."); return false; }
-        if (!v.matches("\\d{2}/\\d{2}")){ mostrarErro("Validade no formato MM/AA."); return false; }
+        if (!c.matches("\\d{16}")) {
+            new TelaErro("Cartão deve conter 16 dígitos numéricos.", 0).setVisible(true);
+            return false;
+        }
+        if (!cv.matches("\\d{3}")) {
+            new TelaErro("CVV deve conter 3 dígitos.", 0).setVisible(true);
+            return false;
+        }
+        if (!v.matches("\\d{2}/\\d{2}")) {
+            new TelaErro("Validade deve estar no formato MM/AA.", 0).setVisible(true);
+            return false;
+        }
 
-        int m = Integer.parseInt(v.split("/")[0]);
-        int a = Integer.parseInt("20"+v.split("/")[1]);
-        if (m<1 || m>12)               { mostrarErro("Mês inválido."); return false; }
+        int mes = Integer.parseInt(v.split("/")[0]);
+        int ano = Integer.parseInt("20" + v.split("/")[1]);
 
-        LocalDate hoje = LocalDate.now(),
-                  venc = LocalDate.of(a, m, 1).withDayOfMonth(1);
-        if (venc.isBefore(hoje.withDayOfMonth(1))) { mostrarErro("Cartão vencido."); return false; }
+        if (mes < 1 || mes > 12) {
+            new TelaErro("Mês de validade inválido.", 0).setVisible(true);
+            return false;
+        }
+
+        LocalDate hoje = LocalDate.now();
+        LocalDate vencimento = LocalDate.of(ano, mes, 1).withDayOfMonth(1);
+        if (vencimento.isBefore(hoje.withDayOfMonth(1))) {
+            new TelaErro("Cartão vencido.", 0).setVisible(true);
+            return false;
+        }
 
         return true;
-    }
-
-    private void mostrarErro(String msg) {
-        JOptionPane.showMessageDialog(this, msg);
     }
 }
