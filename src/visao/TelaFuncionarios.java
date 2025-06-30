@@ -14,7 +14,7 @@ import modelo.FuncionarioTableModel;
 import modelo.Produto;
 import net.miginfocom.swing.MigLayout;
 
-// ... [importações e pacote iguais]
+
 
 public class TelaFuncionarios extends JFrame {
 

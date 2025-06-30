@@ -103,7 +103,7 @@ public class TelaCarrinho extends JFrame {
 
         if (listaItens.isEmpty()) {
             JLabel lblVazio = new JLabel("O carrinho está vazio!");
-            lblVazio.setFont(new Font("Tahoma", Font.BOLD, 20));
+            lblVazio.setFont(new Font("Tahoma", Font.BOLD, 18));
             lblVazio.setForeground(Color.BLACK);
             lblVazio.setAlignmentX(Component.CENTER_ALIGNMENT);
 
@@ -210,6 +210,11 @@ public class TelaCarrinho extends JFrame {
                     return;
                 }
 
+                if (listaItens == null || listaItens.isEmpty()) {
+                    JOptionPane.showMessageDialog(this, "O carrinho está vazio! Adicione produtos antes de finalizar a compra.", "Carrinho Vazio", JOptionPane.WARNING_MESSAGE);
+                    return;
+                }
+
                 new TelaPagamento(carrinho, funcionario).setVisible(true);
                 dispose();
 
@@ -217,7 +222,6 @@ public class TelaCarrinho extends JFrame {
                 e1.printStackTrace();
             }
         });
-
         painelRodape.add(btnFinalizar);
         parent.add(painelRodape, "cell 0 2, align right, growx");
     }

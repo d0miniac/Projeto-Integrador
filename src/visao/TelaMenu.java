@@ -40,7 +40,7 @@ public class TelaMenu extends JFrame {
         mainPanel.setBackground(new Color(230, 230, 230));
 
         JPanel topPanel = new JPanel(new MigLayout("", "[87px][][::1000px,grow][160px]", "[][][][][][][][]"));
-        topPanel.setBackground(new Color(33, 64, 154));
+        topPanel.setBackground(new Color(32, 60, 115));
         topPanel.setPreferredSize(new Dimension(600, 100));
 
         JLabel lblIconeUser = new JLabel();
