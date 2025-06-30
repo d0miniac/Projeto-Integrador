@@ -73,7 +73,7 @@ public class TelaPagamento extends JFrame {
         JLabel lblTitulo = new JLabel("Pagamento");
         lblTitulo.setFont(new Font("Arial", Font.BOLD, 28));
         lblTitulo.setForeground(Color.WHITE);
-        lblTitulo.setHorizontalAlignment(SwingConstants.CENTER);
+        lblTitulo.setHorizontalAlignment(SwingConstants.LEFT);
         bgBarra.add(lblTitulo, BorderLayout.CENTER);
 
         JPanel direita = new JPanel(new FlowLayout(FlowLayout.RIGHT));

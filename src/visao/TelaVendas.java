@@ -2,6 +2,11 @@ package visao;
 
 import java.awt.*;
 import java.awt.event.*;
+import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.IOException;
+
+import javax.imageio.ImageIO;
 import javax.swing.*;
 import javax.swing.border.LineBorder;
 
@@ -147,6 +152,7 @@ public class TelaVendas extends JFrame {
 
     private void exibirProdutos(List<Produto> produtos) {
         panelProdutos.removeAll();
+
         for (Produto prod : produtos) {
             JButton btnProduto = new JButton();
             btnProduto.setPreferredSize(new Dimension(350, 400));
@@ -155,10 +161,18 @@ public class TelaVendas extends JFrame {
 
             JLabel lblImage;
             try {
-                ImageIcon icon = new ImageIcon(getClass().getResource("/img/" + prod.getFoto()));
-                Image image = icon.getImage().getScaledInstance(350, 350, Image.SCALE_SMOOTH);
-                lblImage = new JLabel(new ImageIcon(image));
-            } catch (Exception e) {
+                String nomeImagem = prod.getFoto();
+                File imagemArquivo = new File("src/img/" + nomeImagem);
+
+                if (nomeImagem == null || nomeImagem.isBlank() || !imagemArquivo.exists()) {
+                    imagemArquivo = new File("src/img/imagem_padrao.png");
+                }
+
+                BufferedImage imagem = ImageIO.read(imagemArquivo);
+                Image imagemRedimensionada = imagem.getScaledInstance(350, 350, Image.SCALE_SMOOTH);
+                lblImage = new JLabel(new ImageIcon(imagemRedimensionada));
+            } catch (IOException e) {
+                e.printStackTrace();
                 lblImage = new JLabel("Imagem não encontrada");
                 lblImage.setHorizontalAlignment(SwingConstants.CENTER);
             }
@@ -172,25 +186,24 @@ public class TelaVendas extends JFrame {
             panelDetalhes.add(new JLabel("Categoria: " + prod.getCategoria().getDescricao()));
 
             btnProduto.add(panelDetalhes, BorderLayout.SOUTH);
-
             btnProduto.addActionListener(e -> adicionarAoCarrinho(prod));
             panelProdutos.add(btnProduto);
         }
+
         panelProdutos.revalidate();
         panelProdutos.repaint();
     }
 
     private void aplicarFiltro() {
         String categoriaSelecionada = (String) comboCategorias.getSelectedItem();
-
         List<Produto> filtrados;
 
         if ("Todas categorias".equals(categoriaSelecionada)) {
             filtrados = listaProdutos;
         } else {
             filtrados = listaProdutos.stream()
-                    .filter(p -> p.getCategoria() != null
-                            && p.getCategoria().getDescricao().equalsIgnoreCase(categoriaSelecionada))
+                    .filter(p -> p.getCategoria() != null &&
+                            p.getCategoria().getDescricao().equalsIgnoreCase(categoriaSelecionada))
                     .collect(Collectors.toList());
         }
 

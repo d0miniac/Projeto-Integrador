@@ -119,7 +119,6 @@ public class Produto {
         this.foto = foto;
     }
 
-    // 🌟 Nome amigável construído dinamicamente com dados do produto
     public String getNomeVisual() {
         StringBuilder sb = new StringBuilder();
         if (marca != null) sb.append(marca.getDescricao()).append(" ");
@@ -129,7 +128,6 @@ public class Produto {
         return sb.toString().trim();
     }
 
-    // 👁️ Usado para exibição em listas, logs, e combo boxes
     @Override
     public String toString() {
         return getNomeVisual() + " - R$ " + preco;

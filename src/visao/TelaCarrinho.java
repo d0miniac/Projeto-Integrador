@@ -131,9 +131,9 @@ public class TelaCarrinho extends JFrame {
                         java.net.URL caminho = getClass().getResource("/" + produto.getFoto());
                         image = caminho != null
                             ? new ImageIcon(caminho).getImage().getScaledInstance(300, 240, Image.SCALE_SMOOTH)
-                            : new ImageIcon(getClass().getResource("/img/sem-foto.png")).getImage().getScaledInstance(300, 240, Image.SCALE_SMOOTH);
+                            : new ImageIcon(getClass().getResource("/img/imagem_padrao.png")).getImage().getScaledInstance(300, 240, Image.SCALE_SMOOTH);
                     } else {
-                        image = new ImageIcon(getClass().getResource("/img/sem-foto.png"))
+                        image = new ImageIcon(getClass().getResource("/img/imagem_padrao.png"))
                             .getImage().getScaledInstance(300, 240, Image.SCALE_SMOOTH);
                     }
 
