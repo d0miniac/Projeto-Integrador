@@ -3,7 +3,6 @@ package visao;
 import java.awt.*;
 import java.awt.event.*;
 import java.util.ArrayList;
-
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
 import javax.swing.border.LineBorder;
@@ -78,15 +77,6 @@ public class TelaHistoricoVendas extends JFrame {
             }
         });
 
-        JButton btnAtualizar = new JButton("Atualizar");
-        btnAtualizar.setFont(new Font("Tahoma", Font.BOLD, 18));
-        btnAtualizar.setForeground(Color.WHITE);
-        btnAtualizar.setBackground(new Color(32, 60, 115));
-        btnAtualizar.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
-        contentPane.add(btnAtualizar, "cell 3 4,alignx left");
-
-        btnAtualizar.addActionListener(e -> atualizarTabela());
-
         JScrollPane scrollPane = new JScrollPane();
         scrollPane.setBorder(new LineBorder(new Color(123, 150, 212), 2, true));
         contentPane.add(scrollPane, "cell 0 5 6 1,grow");
@@ -103,7 +93,6 @@ public class TelaHistoricoVendas extends JFrame {
 
         estilizarTabela();
 
-        // 👇 Clique para abrir detalhes da venda
         table.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
@@ -114,13 +103,6 @@ public class TelaHistoricoVendas extends JFrame {
                 }
             }
         });
-    }
-
-    private void atualizarTabela() {
-        VendaDAO vdao = new VendaDAO();
-        listaVendas = vdao.selecionarVendas();
-        vtm.setLista(listaVendas);
-        vtm.fireTableDataChanged();
     }
 
     private void estilizarTabela() {
