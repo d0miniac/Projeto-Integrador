@@ -100,73 +100,90 @@ public class TelaCarrinho extends JFrame {
         JPanel painelItens = new JPanel();
         painelItens.setOpaque(false);
         painelItens.setLayout(new MigLayout("wrap 3", "[fill][fill][fill]", "20[]20"));
-        scrollPane.setViewportView(painelItens);
 
-        for (ItemVenda item : listaItens) {
-            JPanel cardItem = new JPanel();
-            cardItem.setPreferredSize(new Dimension(300, 380));
-            cardItem.setBackground(Color.WHITE);
-            cardItem.setLayout(new BorderLayout());
-            cardItem.setBorder(BorderFactory.createLineBorder(Color.LIGHT_GRAY));
+        if (listaItens.isEmpty()) {
+            JLabel lblVazio = new JLabel("O carrinho está vazio!");
+            lblVazio.setFont(new Font("Tahoma", Font.BOLD, 20));
+            lblVazio.setForeground(Color.BLACK);
+            lblVazio.setAlignmentX(Component.CENTER_ALIGNMENT);
 
-            try {
-                Produto produto = item.getFoto();
-                Image image;
+            JPanel vazioPanel = new JPanel();
+            vazioPanel.setOpaque(false);
+            vazioPanel.setLayout(new BoxLayout(vazioPanel, BoxLayout.Y_AXIS));
+            vazioPanel.add(Box.createVerticalGlue());
+            vazioPanel.add(lblVazio);
+            vazioPanel.add(Box.createVerticalGlue());
 
-                if (produto.getFoto() != null && !produto.getFoto().isEmpty()) {
-                    java.net.URL caminho = getClass().getResource("/" + produto.getFoto());
-                    image = caminho != null
-                        ? new ImageIcon(caminho).getImage().getScaledInstance(300, 240, Image.SCALE_SMOOTH)
-                        : new ImageIcon(getClass().getResource("/img/sem-foto.png")).getImage().getScaledInstance(300, 240, Image.SCALE_SMOOTH);
-                } else {
-                    image = new ImageIcon(getClass().getResource("/img/sem-foto.png"))
-                        .getImage().getScaledInstance(300, 240, Image.SCALE_SMOOTH);
+            scrollPane.setViewportView(vazioPanel);
+        } else {
+            for (ItemVenda item : listaItens) {
+                JPanel cardItem = new JPanel();
+                cardItem.setPreferredSize(new Dimension(300, 380));
+                cardItem.setBackground(Color.WHITE);
+                cardItem.setLayout(new BorderLayout());
+                cardItem.setBorder(BorderFactory.createLineBorder(Color.LIGHT_GRAY));
+
+                try {
+                    Produto produto = item.getFoto();
+                    Image image;
+
+                    if (produto.getFoto() != null && !produto.getFoto().isEmpty()) {
+                        java.net.URL caminho = getClass().getResource("/" + produto.getFoto());
+                        image = caminho != null
+                            ? new ImageIcon(caminho).getImage().getScaledInstance(300, 240, Image.SCALE_SMOOTH)
+                            : new ImageIcon(getClass().getResource("/img/sem-foto.png")).getImage().getScaledInstance(300, 240, Image.SCALE_SMOOTH);
+                    } else {
+                        image = new ImageIcon(getClass().getResource("/img/sem-foto.png"))
+                            .getImage().getScaledInstance(300, 240, Image.SCALE_SMOOTH);
+                    }
+
+                    JLabel lblFoto = new JLabel(new ImageIcon(image));
+                    cardItem.add(lblFoto, BorderLayout.CENTER);
+
+                } catch (Exception ex) {
+                    JLabel lblErro = new JLabel("Imagem indisponível", SwingConstants.CENTER);
+                    lblErro.setPreferredSize(new Dimension(300, 240));
+                    cardItem.add(lblErro, BorderLayout.CENTER);
                 }
 
-                JLabel lblFoto = new JLabel(new ImageIcon(image));
-                cardItem.add(lblFoto, BorderLayout.CENTER);
+                JPanel painelDetalhes = new JPanel();
+                painelDetalhes.setLayout(new BoxLayout(painelDetalhes, BoxLayout.Y_AXIS));
+                painelDetalhes.setBackground(Color.WHITE);
+                painelDetalhes.setBorder(new EmptyBorder(5, 10, 10, 10));
 
-            } catch (Exception ex) {
-                JLabel lblErro = new JLabel("Imagem indisponível", SwingConstants.CENTER);
-                lblErro.setPreferredSize(new Dimension(300, 240));
-                cardItem.add(lblErro, BorderLayout.CENTER);
+                JLabel lblNome = new JLabel("Produto: " + item.getNome());
+                JLabel lblQuantidade = new JLabel("Quantidade: " + item.getQuantidade());
+                painelDetalhes.add(lblNome);
+                painelDetalhes.add(lblQuantidade);
+
+                JButton btnRemover = new JButton("Remover");
+                btnRemover.setBackground(new Color(220, 53, 69));
+                btnRemover.setForeground(Color.WHITE);
+                btnRemover.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+                btnRemover.setAlignmentX(Component.LEFT_ALIGNMENT);
+
+                btnRemover.addActionListener(e -> {
+                    int opcao = JOptionPane.showConfirmDialog(this,
+                            "Deseja remover este item do carrinho?",
+                            "Confirmação",
+                            JOptionPane.YES_NO_OPTION);
+
+                    if (opcao == JOptionPane.YES_OPTION) {
+                        listaItens.remove(item);
+                        carrinho.setItens(listaItens);
+                        dispose();
+                        new TelaCarrinho(carrinho, funcionario).setVisible(true);
+                    }
+                });
+
+                painelDetalhes.add(Box.createVerticalStrut(8));
+                painelDetalhes.add(btnRemover);
+
+                cardItem.add(painelDetalhes, BorderLayout.SOUTH);
+                painelItens.add(cardItem, "gapbottom 20");
             }
 
-            JPanel painelDetalhes = new JPanel();
-            painelDetalhes.setLayout(new BoxLayout(painelDetalhes, BoxLayout.Y_AXIS));
-            painelDetalhes.setBackground(Color.WHITE);
-            painelDetalhes.setBorder(new EmptyBorder(5, 10, 10, 10));
-
-            JLabel lblNome = new JLabel("Produto: " + item.getNome());
-            JLabel lblQuantidade = new JLabel("Quantidade: " + item.getQuantidade());
-            painelDetalhes.add(lblNome);
-            painelDetalhes.add(lblQuantidade);
-
-            JButton btnRemover = new JButton("Remover");
-            btnRemover.setBackground(new Color(220, 53, 69));
-            btnRemover.setForeground(Color.WHITE);
-            btnRemover.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
-            btnRemover.setAlignmentX(Component.LEFT_ALIGNMENT);
-
-            btnRemover.addActionListener(e -> {
-                int opcao = JOptionPane.showConfirmDialog(this,
-                        "Deseja remover este item do carrinho?",
-                        "Confirmação",
-                        JOptionPane.YES_NO_OPTION);
-
-                if (opcao == JOptionPane.YES_OPTION) {
-                    listaItens.remove(item);
-                    carrinho.setItens(listaItens);
-                    dispose();
-                    new TelaCarrinho(carrinho, funcionario).setVisible(true);
-                }
-            });
-
-            painelDetalhes.add(Box.createVerticalStrut(8));
-            painelDetalhes.add(btnRemover);
-
-            cardItem.add(painelDetalhes, BorderLayout.SOUTH);
-            painelItens.add(cardItem, "gapbottom 20");
+            scrollPane.setViewportView(painelItens);
         }
 
         painelCentro.add(scrollPane, BorderLayout.CENTER);
